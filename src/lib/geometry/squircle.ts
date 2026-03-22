@@ -24,7 +24,12 @@ function getClampedRadius(width: number, height: number, radius: number) {
 	return clamp(radius, 0, Math.min(width, height) / 2);
 }
 
-function getSuperellipsePoint(centerX: number, centerY: number, radius: number, angle: number) {
+function getSuperellipsePoint(
+	centerX: number,
+	centerY: number,
+	radius: number,
+	angle: number,
+) {
 	const cos = Math.cos(angle);
 	const sin = Math.sin(angle);
 	const exponent = 2 / SQUIRCLE_EXPONENT;
@@ -88,7 +93,14 @@ export function getSquirclePathPoints({
 		for (let index = 1; index <= SQUIRCLE_SEGMENTS_PER_CORNER; index += 1) {
 			const t = index / SQUIRCLE_SEGMENTS_PER_CORNER;
 			const angle = corner.start + (corner.end - corner.start) * t;
-			points.push(getSuperellipsePoint(corner.centerX, corner.centerY, clampedRadius, angle));
+			points.push(
+				getSuperellipsePoint(
+					corner.centerX,
+					corner.centerY,
+					clampedRadius,
+					angle,
+				),
+			);
 		}
 	}
 
@@ -107,7 +119,10 @@ export function getSquircleSvgPath(rect: SquircleRect) {
 		.join(" ")} Z`;
 }
 
-export function drawSquircleOnCanvas(ctx: CanvasRenderingContext2D, rect: SquircleRect) {
+export function drawSquircleOnCanvas(
+	ctx: CanvasRenderingContext2D,
+	rect: SquircleRect,
+) {
 	const points = getSquirclePathPoints(rect);
 	if (points.length === 0) {
 		return;

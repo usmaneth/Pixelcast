@@ -2123,25 +2123,22 @@ export default function VideoEditor() {
 	}, []);
 
 	const selectedZoomDepth = useMemo(
-		() =>
-			selectedZoomId ? (zoomRegions.find((z) => z.id === selectedZoomId)?.depth ?? null) : null,
+		() => selectedZoomId ? (zoomRegions.find((z) => z.id === selectedZoomId)?.depth ?? null) : null,
 		[selectedZoomId, zoomRegions],
 	);
 
 	const selectedSpeedValue = useMemo(
-		() =>
-			selectedSpeedId ? (speedRegions.find((r) => r.id === selectedSpeedId)?.speed ?? null) : null,
+		() => selectedSpeedId ? (speedRegions.find((r) => r.id === selectedSpeedId)?.speed ?? null) : null,
 		[selectedSpeedId, speedRegions],
 	);
 
 	const gifOutputDims = useMemo(
-		() =>
-			calculateOutputDimensions(
-				videoPlaybackRef.current?.video?.videoWidth || 1920,
-				videoPlaybackRef.current?.video?.videoHeight || 1080,
-				gifSizePreset,
-				GIF_SIZE_PRESETS,
-			),
+		() => calculateOutputDimensions(
+			videoPlaybackRef.current?.video?.videoWidth || 1920,
+			videoPlaybackRef.current?.video?.videoHeight || 1080,
+			gifSizePreset,
+			GIF_SIZE_PRESETS,
+		),
 		[gifSizePreset],
 	);
 
@@ -2170,34 +2167,29 @@ export default function VideoEditor() {
 	}
 
 	return (
-		<div className="flex flex-col h-screen bg-[#18181A] text-[#EEEEF0] overflow-hidden selection:bg-white/20">
+		<div className="flex flex-col h-screen bg-[#0D0D0D] text-[#F2F0ED] overflow-hidden selection:bg-[#E0000F]/30">
 			<div
-				className="relative h-14 flex-shrink-0 bg-[#18181A] border-b border-black/50 flex items-center justify-between px-6 z-50 shadow-[0_1px_0_rgba(255,255,255,0.02)]"
+				className="relative h-14 flex-shrink-0 bg-[#0D0D0D] border-b border-[#2E2E2E] flex items-center justify-between px-6 z-50"
 				style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
 			>
 				{/* Left: Branding & Actions */}
-				<div
-					className="flex items-center gap-4"
-					style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
-				>
+				<div className="flex items-center gap-4" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
 					<div className="flex items-center gap-2 select-none mr-2">
 						<div className="w-5 h-5 relative flex items-center justify-center">
-							<div className="absolute w-3 h-3 border-[1.5px] border-white/20 rounded-[2px] transform rotate-12" />
-							<div className="absolute w-3 h-3 border-[1.5px] border-white/40 rounded-[2px] transform -rotate-12" />
-							<div className="absolute w-3 h-3 bg-[#FF453A] rounded-[2px] transform rotate-45" />
+							<div className="absolute w-3 h-3 border-[1.5px] border-[#2E2E2E] rounded-[2px] transform rotate-12" />
+							<div className="absolute w-3 h-3 border-[1.5px] border-[#555] rounded-[2px] transform -rotate-12" />
+							<div className="absolute w-3 h-3 bg-[#E0000F] rounded-[2px] transform rotate-45 shadow-[0_0_8px_rgba(224,0,15,0.4)]" />
 						</div>
-						<span className="text-[15px] font-medium tracking-[-0.03em] text-[#EEEEF0] mt-0.5">
-							klipt
-						</span>
+						<span className="text-[15px] font-medium tracking-[-0.03em] text-[#F2F0ED] mt-0.5">klipt</span>
 					</div>
 
-					<div className="h-4 w-px bg-white/10 mx-1" />
+					<div className="h-4 w-px bg-[#2E2E2E] mx-1" />
 
 					<div className="flex items-center gap-1">
 						<button
 							onClick={handleUndo}
 							disabled={historyPastRef.current.length === 0}
-							className="h-8 w-8 flex items-center justify-center rounded-md text-[#A1A1A6] hover:bg-white/10 hover:text-[#EEEEF0] disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+							className="h-8 w-8 flex items-center justify-center rounded-md text-[#888] hover:bg-[#1C1C1C] hover:text-[#F2F0ED] disabled:opacity-30 disabled:hover:bg-transparent transition-all"
 							title="Undo (Cmd/Ctrl + Z)"
 						>
 							<Undo2 className="w-4 h-4" />
@@ -2205,7 +2197,7 @@ export default function VideoEditor() {
 						<button
 							onClick={handleRedo}
 							disabled={historyFutureRef.current.length === 0}
-							className="h-8 w-8 flex items-center justify-center rounded-md text-[#A1A1A6] hover:bg-white/10 hover:text-[#EEEEF0] disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+							className="h-8 w-8 flex items-center justify-center rounded-md text-[#888] hover:bg-[#1C1C1C] hover:text-[#F2F0ED] disabled:opacity-30 disabled:hover:bg-transparent transition-all"
 							title="Redo (Cmd/Ctrl + Shift + Z)"
 						>
 							<Redo2 className="w-4 h-4" />
@@ -2214,41 +2206,30 @@ export default function VideoEditor() {
 				</div>
 
 				{/* Center: Project Name */}
-				<div
-					className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center"
-					style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
-				>
-					<div className="px-3 py-1.5 rounded-md hover:bg-white/10 transition-colors cursor-text group flex items-center gap-2">
-						<span className="text-[13px] font-medium text-[#EEEEF0]">
-							{currentProjectPath
-								? currentProjectPath
-										.split(/[\\/]/)
-										.pop()
-										?.replace(/\.[^.]+$/, "")
-								: "Untitled Project"}
+				<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+					<div className="px-3 py-1.5 rounded-md hover:bg-[#1C1C1C] transition-colors cursor-text group flex items-center gap-2">
+						<span className="text-[13px] font-medium text-[#F2F0ED]">
+							{currentProjectPath ? currentProjectPath.split(/[\\/]/).pop()?.replace(/\.[^.]+$/, "") : "Untitled Project"}
 						</span>
-						{hasUnsavedChanges && <div className="w-1.5 h-1.5 rounded-full bg-[#0A84FF]" />}
+						{hasUnsavedChanges && <div className="w-1.5 h-1.5 rounded-full bg-[#E0000F]" />}
 					</div>
 				</div>
 
 				{/* Right: Export & Share */}
-				<div
-					className="flex items-center gap-3"
-					style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
-				>
+				<div className="flex items-center gap-3" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
 					<LanguageSwitcher />
 					<button
 						type="button"
 						onClick={() => void openRecordingsFolder()}
-						className="inline-flex h-8 items-center gap-2 rounded-lg px-3 text-[#A1A1A6] hover:bg-white/10 hover:text-[#EEEEF0] transition-all"
+						className="inline-flex h-8 items-center gap-2 rounded-lg px-3 text-[#888] hover:bg-[#1C1C1C] hover:text-[#F2F0ED] transition-all"
 						title={t("common.app.manageRecordings", "Open recordings folder")}
 					>
 						<FolderOpen className="h-4 w-4" />
 					</button>
 
-					<div className="h-4 w-px bg-white/10" />
+					<div className="h-4 w-px bg-[#2E2E2E]" />
 
-					<button className="h-8 px-3 rounded-lg flex items-center gap-2 text-[#A1A1A6] hover:bg-white/10 hover:text-[#EEEEF0] transition-all text-xs font-medium">
+					<button className="h-8 px-3 rounded-lg flex items-center gap-2 text-[#888] hover:bg-[#1C1C1C] hover:text-[#F2F0ED] transition-all text-xs font-medium">
 						<Share className="w-3.5 h-3.5" />
 						Share
 					</button>
@@ -2256,7 +2237,7 @@ export default function VideoEditor() {
 					<button
 						onClick={handleOpenExportDialog}
 						disabled={isExporting}
-						className="h-7 px-3 flex items-center gap-1.5 rounded-md bg-[#0A84FF] text-white text-[13px] font-medium shadow-sm hover:bg-[#007AFF] active:scale-[0.98] transition-all border border-white/10 disabled:opacity-50 disabled:pointer-events-none ml-2"
+						className="h-8 px-4 flex items-center gap-2 rounded-lg bg-gradient-to-b from-[#E0000F] to-[#B0000B] text-white text-xs font-medium shadow-[0_2px_10px_rgba(224,0,15,0.2),inset_0_1px_0_rgba(255,255,255,0.2)] hover:shadow-[0_4px_15px_rgba(224,0,15,0.4)] hover:-translate-y-px active:translate-y-0 transition-all border border-[#FF2215]/50 disabled:opacity-50 disabled:pointer-events-none ml-2"
 					>
 						<Download className="w-3.5 h-3.5" />
 						Export
@@ -2264,15 +2245,15 @@ export default function VideoEditor() {
 				</div>
 			</div>
 
-			<div className="flex-1 p-4 gap-4 flex min-h-0 relative bg-[#18181A]">
+			<div className="flex-1 p-4 gap-4 flex min-h-0 relative bg-[#0D0D0D]">
 				{/* Left Column - Video & Timeline */}
 				<div className="flex-[7] flex flex-col gap-6 min-w-0 h-full">
 					<PanelGroup direction="vertical" className="gap-6">
 						{/* Top section: video preview and controls */}
 						<Panel defaultSize={70} minSize={40}>
-							<div className="w-full h-full flex flex-col items-center justify-center bg-[#1E1E20] rounded-xl border border-black/50 shadow-[0_1px_0_rgba(255,255,255,0.02)] overflow-hidden relative">
+							<div className="w-full h-full flex flex-col items-center justify-center bg-[#0B0D17]/80 rounded-2xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-hidden relative">
 								{/* Subtle background glow for the container */}
-
+								<div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 pointer-events-none" />
 								{/* Video preview */}
 								<div
 									className="w-full flex justify-center items-center relative z-10"
@@ -2367,13 +2348,13 @@ export default function VideoEditor() {
 							</div>
 						</Panel>
 
-						<PanelResizeHandle className="h-2 bg-transparent hover:bg-white/5 transition-colors rounded-full flex items-center justify-center cursor-row-resize">
-							<div className="w-10 h-1 bg-white/20 rounded-full"></div>
+						<PanelResizeHandle className="h-4 bg-[#0A0D15]/40 hover:bg-[#0A0D15]/80 transition-colors rounded-full mx-4 flex items-center justify-center cursor-row-resize shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] border border-white/5">
+							<div className="w-12 h-1 bg-white/20 rounded-full shadow-[0_0_5px_rgba(255,255,255,0.2)]"></div>
 						</PanelResizeHandle>
 
 						{/* Timeline section */}
 						<Panel defaultSize={30} minSize={20}>
-							<div className="h-full min-h-0 bg-[#1E1E20] rounded-xl border border-black/50 shadow-[0_1px_0_rgba(255,255,255,0.02)] overflow-hidden flex flex-col relative">
+							<div className="h-full min-h-0 bg-[#0B0D17]/80 backdrop-blur-md rounded-2xl border border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.05)] overflow-hidden flex flex-col relative">
 								<TimelineEditor
 									videoDuration={duration}
 									currentTime={currentTime}

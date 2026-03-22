@@ -72,7 +72,10 @@ export class ForwardFrameSource {
 				throw new Error(result.error || "Failed to read local video file");
 			}
 
-			const bytes = result.data instanceof Uint8Array ? result.data : new Uint8Array(result.data);
+			const bytes =
+				result.data instanceof Uint8Array
+					? result.data
+					: new Uint8Array(result.data);
 			const arrayBuffer = bytes.buffer.slice(
 				bytes.byteOffset,
 				bytes.byteOffset + bytes.byteLength,
@@ -84,7 +87,9 @@ export class ForwardFrameSource {
 
 		const response = await fetch(resourceUrl);
 		if (!response.ok) {
-			throw new Error(`Failed to load video resource: ${response.status} ${response.statusText}`);
+			throw new Error(
+				`Failed to load video resource: ${response.status} ${response.statusText}`,
+			);
 		}
 
 		const blob = await response.blob();
@@ -107,14 +112,19 @@ export class ForwardFrameSource {
 
 	async initialize(videoUrl: string): Promise<ForwardFrameSourceMetadata> {
 		const resourceUrl = this.resolveVideoResourceUrl(videoUrl);
-		const wasmUrl = new URL("./wasm/web-demuxer.wasm", window.location.href).href;
+		const wasmUrl = new URL(
+			"./wasm/web-demuxer.wasm",
+			window.location.href,
+		).href;
 		this.demuxer = new WebDemuxer({ wasmFilePath: wasmUrl });
 
 		const file = await this.loadVideoFile(resourceUrl);
 		await this.demuxer.load(file);
 
 		const mediaInfo = await this.demuxer.getMediaInfo();
-		const videoStream = mediaInfo.streams.find((stream) => stream.codec_type_string === "video");
+		const videoStream = mediaInfo.streams.find(
+			(stream) => stream.codec_type_string === "video",
+		);
 
 		this.metadata = {
 			width: videoStream?.width || 0,
@@ -134,7 +144,8 @@ export class ForwardFrameSource {
 
 		const decoderConfig = await this.demuxer.getDecoderConfig("video");
 		const codec = this.metadata.codec.toLowerCase();
-		const shouldPreferSoftwareDecode = codec.includes("av01") || codec.includes("av1");
+		const shouldPreferSoftwareDecode =
+			codec.includes("av01") || codec.includes("av1");
 
 		this.decoder = new VideoDecoder({
 			output: (frame: VideoFrame) => {
@@ -184,7 +195,8 @@ export class ForwardFrameSource {
 					}
 
 					while (
-						(this.decoder!.decodeQueueSize > 10 || this.pendingFrames.length > 24) &&
+						(this.decoder!.decodeQueueSize > 10 ||
+							this.pendingFrames.length > 24) &&
 						!this.cancelled
 					) {
 						await new Promise((resolve) => setTimeout(resolve, 1));
@@ -201,7 +213,8 @@ export class ForwardFrameSource {
 					await this.decoder.flush();
 				}
 			} catch (feedError) {
-				this.decodeError = feedError instanceof Error ? feedError : new Error(String(feedError));
+				this.decodeError =
+					feedError instanceof Error ? feedError : new Error(String(feedError));
 			} finally {
 				this.decodeDone = true;
 				if (this.frameResolve) {
@@ -241,7 +254,9 @@ export class ForwardFrameSource {
 			Math.min(targetTimeSec, this.metadata.duration || targetTimeSec),
 		);
 		if (clampedTargetTime + 0.001 < this.lastTargetTimeSec) {
-			throw new Error("ForwardFrameSource only supports increasing timestamps");
+			throw new Error(
+				"ForwardFrameSource only supports increasing timestamps",
+			);
 		}
 		this.lastTargetTimeSec = clampedTargetTime;
 
