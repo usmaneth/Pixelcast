@@ -1314,6 +1314,10 @@ const TimelineEditor = memo(function TimelineEditor({
 					deleteSelectedAudio();
 				}
 			}
+			// Alt/Option: reveal cutting room floor
+			if (e.key === "Alt") {
+				setIsFloorRevealed(true);
+			}
 		};
 		window.addEventListener("keydown", handleKeyDown);
 
