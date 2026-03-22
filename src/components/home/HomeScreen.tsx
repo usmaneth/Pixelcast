@@ -308,76 +308,36 @@ export function HomeScreen() {
 
 				{/* ---- ACTION BUTTONS ---- */}
 				<div
-					className="flex items-center gap-6 w-full max-w-2xl"
-					style={{ marginTop: 40, marginBottom: 12, WebkitAppRegion: "no-drag" } as React.CSSProperties}
+					className="flex items-center gap-3"
+					style={{ marginTop: 40, marginBottom: 12, animation: "hs-fadeSlideUp 600ms ease-out 700ms both", WebkitAppRegion: "no-drag" } as React.CSSProperties}
 				>
-					<div
+					<button
+						type="button"
 						onClick={handleRecordClick}
-						className="flex-1 flex flex-col items-start p-8 rounded-[24px] cursor-pointer group transition-all duration-500 relative overflow-hidden"
+						className="flex items-center gap-2.5 px-7 py-3 rounded-xl text-[14px] font-semibold cursor-pointer transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
 						style={{
-							background: "rgba(255,255,255,0.02)",
-							border: "1px solid rgba(255,255,255,0.05)",
-							boxShadow: "0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
-							backdropFilter: "blur(20px)",
-							WebkitBackdropFilter: "blur(20px)",
-							animation: "hs-fadeSlideUp 600ms ease-out 700ms both",
-						}}
-						onMouseEnter={(e) => {
-							e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-							e.currentTarget.style.borderColor = "rgba(224,0,15,0.3)";
-							e.currentTarget.style.transform = "translateY(-4px)";
-							e.currentTarget.style.boxShadow = "0 20px 50px rgba(224,0,15,0.2), inset 0 1px 0 rgba(255,255,255,0.1)";
-						}}
-						onMouseLeave={(e) => {
-							e.currentTarget.style.background = "rgba(255,255,255,0.02)";
-							e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
-							e.currentTarget.style.transform = "translateY(0px)";
-							e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)";
+							background: "#fff",
+							color: "#000",
+							border: "none",
+							boxShadow: "0 4px 20px rgba(255,255,255,0.1)",
 						}}
 					>
-						<div className="absolute inset-0 bg-gradient-to-br from-[#E0000F]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-						
-						<div className="w-14 h-14 rounded-full bg-[#E0000F]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_rgba(224,0,15,0.2)] group-hover:shadow-[0_0_30px_rgba(224,0,15,0.5)] border border-[#E0000F]/30">
-							<CircleDot className="w-6 h-6 text-[#E0000F]" />
-						</div>
-						
-						<h2 className="text-[20px] font-semibold mb-2 text-white font-sans tracking-tight">New Recording</h2>
-						<p className="text-[13px] text-white/40 font-medium leading-relaxed font-sans">Capture your screen with AI-powered editing</p>
-					</div>
-
-					<div
+						<CircleDot className="w-4 h-4" />
+						Start Recording
+					</button>
+					<button
+						type="button"
 						onClick={handleEditClick}
-						className="flex-1 flex flex-col items-start p-8 rounded-[24px] cursor-pointer group transition-all duration-500 relative overflow-hidden"
+						className="flex items-center gap-2.5 px-7 py-3 rounded-xl text-[14px] font-medium cursor-pointer transition-all duration-200 hover:bg-white/[0.06] active:scale-[0.98]"
 						style={{
-							background: "rgba(255,255,255,0.02)",
-							border: "1px solid rgba(255,255,255,0.05)",
-							boxShadow: "0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)",
-							backdropFilter: "blur(20px)",
-							WebkitBackdropFilter: "blur(20px)",
-							animation: "hs-fadeSlideUp 600ms ease-out 850ms both",
-						}}
-						onMouseEnter={(e) => {
-							e.currentTarget.style.background = "rgba(255,255,255,0.04)";
-							e.currentTarget.style.borderColor = "rgba(37,99,235,0.3)";
-							e.currentTarget.style.transform = "translateY(-4px)";
-							e.currentTarget.style.boxShadow = "0 20px 50px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1)";
-						}}
-						onMouseLeave={(e) => {
-							e.currentTarget.style.background = "rgba(255,255,255,0.02)";
-							e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)";
-							e.currentTarget.style.transform = "translateY(0px)";
-							e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)";
+							background: "transparent",
+							color: "rgba(255,255,255,0.4)",
+							border: "1px solid rgba(255,255,255,0.08)",
 						}}
 					>
-						<div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-						
-						<div className="w-14 h-14 rounded-full bg-[#2563EB]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 shadow-[0_0_15px_rgba(37,99,235,0.2)] group-hover:shadow-[0_0_30px_rgba(37,99,235,0.5)] border border-[#2563EB]/30">
-							<Film className="w-6 h-6 text-[#2563EB]" />
-						</div>
-						
-						<h2 className="text-[20px] font-semibold mb-2 text-white font-sans tracking-tight">Edit Video</h2>
-						<p className="text-[13px] text-white/40 font-medium leading-relaxed font-sans">Open and edit an existing recording</p>
-					</div>
+						<Film className="w-4 h-4" />
+						Open File
+					</button>
 				</div>
 
 				{/* ---- KEYBOARD HINTS ---- */}
