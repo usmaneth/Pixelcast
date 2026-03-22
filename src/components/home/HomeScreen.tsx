@@ -138,7 +138,7 @@ export function HomeScreen() {
 		<div
 			className="relative flex flex-col items-center justify-center h-screen w-full overflow-hidden font-sans selection:bg-[#E0000F]/30"
 			style={{
-				background: "#0a0a0a",
+				background: "#000000",
 				WebkitAppRegion: "drag",
 			} as React.CSSProperties}
 		>
@@ -153,7 +153,7 @@ export function HomeScreen() {
 					loop
 					muted
 					playsInline
-					className="absolute inset-0 w-[120%] h-[120%] -left-[10%] -top-[10%] object-cover opacity-[0.3] mix-blend-screen transition-opacity duration-1000"
+					className="absolute inset-0 w-[120%] h-[120%] -left-[10%] -top-[10%] object-cover opacity-[0.8] transition-opacity duration-1000"
 					style={{ filter: "blur(60px)" }}
 					src="/veo-bg.mp4" 
 					// Placeholder. Replace with your Veo generation! -> src="/veo-bg.mp4"
