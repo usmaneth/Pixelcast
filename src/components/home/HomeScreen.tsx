@@ -1,5 +1,5 @@
+import { CircleDot, FileVideo, Film } from "lucide-react";
 import { useEffect, useState } from "react";
-import { CircleDot, Film, FileVideo } from "lucide-react";
 
 /** Simple relative time formatter — avoids pulling in date-fns. */
 function relativeTime(timestampMs: number): string {
@@ -16,7 +16,9 @@ function relativeTime(timestampMs: number): string {
 }
 
 export function HomeScreen() {
-	const [recentProjects, setRecentProjects] = useState<{ name: string; path: string; mtime: number }[]>([]);
+	const [recentProjects, setRecentProjects] = useState<
+		{ name: string; path: string; mtime: number }[]
+	>([]);
 
 	useEffect(() => {
 		async function fetchProjects() {
@@ -65,48 +67,67 @@ export function HomeScreen() {
 	};
 
 	return (
-		<div className="flex flex-col h-screen w-full bg-[#0D0D0D] text-[#F2F0ED] overflow-hidden items-center justify-center p-8 selection:bg-red-500/30" style={{ WebkitAppRegion: "drag" } as React.CSSProperties}>
-
-			<div className="flex flex-col items-center mb-16" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+		<div
+			className="flex flex-col h-screen w-full bg-[#18181A] text-[#EEEEF0] overflow-hidden items-center justify-center p-8 selection:bg-white/20"
+			style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
+		>
+			<div
+				className="flex flex-col items-center mb-16"
+				style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+			>
 				<div className="w-16 h-16 relative flex items-center justify-center mb-4">
 					{/* klipt logo shape simulation - three rotating rectangles */}
-					<div className="absolute w-8 h-8 bg-transparent border-4 border-[#2E2E2E] rounded transform rotate-12" />
-					<div className="absolute w-8 h-8 bg-transparent border-4 border-[#555] rounded transform -rotate-12" />
-					<div className="absolute w-8 h-8 bg-[#E0000F] rounded transform rotate-45 shadow-[0_0_20px_rgba(224,0,15,0.4)]" />
+					<div className="absolute w-7 h-7 bg-transparent border-[3px] border-white/20 rounded-[4px] transform rotate-12" />
+					<div className="absolute w-7 h-7 bg-transparent border-[3px] border-white/40 rounded-[4px] transform -rotate-12" />
+					<div className="absolute w-7 h-7 bg-[#FF453A] rounded-[4px] transform rotate-45" />
 				</div>
-				<h1 className="text-4xl font-medium tracking-[-0.05em] text-white">klipt</h1>
-				<p className="text-sm font-medium text-[#555] mt-2 tracking-wide uppercase">edit at the speed of thought.</p>
+				<h1 className="text-3xl font-semibold tracking-tight text-[#EEEEF0]">Klipt</h1>
+				<p className="text-[13px] text-[#A1A1A6] mt-1.5 tracking-normal">
+					Edit at the speed of thought
+				</p>
 			</div>
 
-			<div className="flex items-center gap-6 w-full max-w-2xl mb-12" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+			<div
+				className="flex items-center gap-6 w-full max-w-2xl mb-12"
+				style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+			>
 				<div
 					onClick={handleRecordClick}
-					className="flex-1 flex flex-col items-start p-8 rounded-2xl bg-[#1C1C1C]/50 border border-[#2E2E2E] shadow-[0_10px_40px_rgba(0,0,0,0.5)] cursor-pointer group hover:bg-[#1C1C1C] hover:border-[#E0000F]/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(224,0,15,0.15)] relative overflow-hidden"
+					className="flex-1 flex flex-col items-start p-6 rounded-2xl bg-[#1E1E20] border border-white/5 shadow-md cursor-pointer group hover:bg-[#252528] hover:border-white/10 transition-all duration-200 relative overflow-hidden"
 				>
-					<div className="absolute inset-0 bg-gradient-to-br from-[#E0000F]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-					<div className="w-12 h-12 rounded-full bg-[#E0000F]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(224,0,15,0.2)] group-hover:shadow-[0_0_25px_rgba(224,0,15,0.4)] ring-1 ring-[#E0000F]/30">
-						<CircleDot className="w-6 h-6 text-[#E0000F]" />
+					<div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+					<div className="w-10 h-10 rounded-full bg-[#FF453A]/10 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 ring-1 ring-[#FF453A]/20">
+						<CircleDot className="w-5 h-5 text-[#FF453A]" />
 					</div>
-					<h2 className="text-xl font-semibold mb-2 text-white">New Recording</h2>
-					<p className="text-sm text-[#888] font-medium leading-relaxed">Capture your screen with AI-powered editing</p>
+					<h2 className="text-[15px] font-semibold mb-1 text-[#EEEEF0]">New Recording</h2>
+					<p className="text-[13px] text-[#A1A1A6] leading-relaxed">
+						Capture your screen with AI-powered editing
+					</p>
 				</div>
 
 				<div
 					onClick={handleEditClick}
-					className="flex-1 flex flex-col items-start p-8 rounded-2xl bg-[#1C1C1C]/50 border border-[#2E2E2E] shadow-[0_10px_40px_rgba(0,0,0,0.5)] cursor-pointer group hover:bg-[#1C1C1C] hover:border-[#2563EB]/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(37,99,235,0.15)] relative overflow-hidden"
+					className="flex-1 flex flex-col items-start p-6 rounded-2xl bg-[#1E1E20] border border-white/5 shadow-md cursor-pointer group hover:bg-[#252528] hover:border-white/10 transition-all duration-200 relative overflow-hidden"
 				>
-					<div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-					<div className="w-12 h-12 rounded-full bg-[#2563EB]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(37,99,235,0.2)] group-hover:shadow-[0_0_25px_rgba(37,99,235,0.4)] ring-1 ring-[#2563EB]/30">
-						<Film className="w-6 h-6 text-[#2563EB]" />
+					<div className="absolute inset-0 bg-gradient-to-b from-white/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+					<div className="w-10 h-10 rounded-full bg-[#0A84FF]/10 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform duration-300 ring-1 ring-[#0A84FF]/20">
+						<Film className="w-5 h-5 text-[#0A84FF]" />
 					</div>
-					<h2 className="text-xl font-semibold mb-2 text-white">Edit Video</h2>
-					<p className="text-sm text-[#888] font-medium leading-relaxed">Open and edit an existing recording</p>
+					<h2 className="text-[15px] font-semibold mb-1 text-[#EEEEF0]">Edit Video</h2>
+					<p className="text-[13px] text-[#A1A1A6] leading-relaxed">
+						Open and edit an existing recording
+					</p>
 				</div>
 			</div>
 
 			{recentProjects.length > 0 && (
-				<div className="w-full max-w-2xl flex flex-col" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
-					<h3 className="text-xs font-bold uppercase tracking-widest text-[#555] mb-4">Recent Projects</h3>
+				<div
+					className="w-full max-w-2xl flex flex-col"
+					style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+				>
+					<h3 className="text-xs font-bold uppercase tracking-widest text-[#555] mb-4">
+						Recent Projects
+					</h3>
 					<div className="flex flex-col gap-2">
 						{recentProjects.map((project) => (
 							<div
@@ -119,8 +140,12 @@ export function HomeScreen() {
 										<FileVideo className="w-4 h-4 text-[#555] group-hover:text-white/80 transition-colors" />
 									</div>
 									<div className="flex flex-col">
-										<span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">{project.name.replace('.klipt', '')}</span>
-										<span className="text-xs text-[#555] mt-0.5">{relativeTime(project.mtime)}</span>
+										<span className="text-sm font-medium text-white/90 group-hover:text-white transition-colors">
+											{project.name.replace(".klipt", "")}
+										</span>
+										<span className="text-xs text-[#555] mt-0.5">
+											{relativeTime(project.mtime)}
+										</span>
 									</div>
 								</div>
 							</div>

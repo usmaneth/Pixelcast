@@ -141,7 +141,7 @@ export class FrameRenderer {
 		// Try to set colorSpace if supported (may not be available on all platforms)
 		try {
 			if (canvas && "colorSpace" in canvas) {
-				// @ts-ignore colorSpace may not exist on all platforms
+				// @ts-expect-error colorSpace may not exist on all platforms
 				canvas.colorSpace = "srgb";
 			}
 		} catch (error) {

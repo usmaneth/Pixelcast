@@ -395,9 +395,7 @@ export function SettingsPanel({
 	// so we never need customImages in the dependency array.
 	useEffect(() => {
 		if (selected.startsWith("data:image")) {
-			setCustomImages((prev) =>
-				prev.includes(selected) ? prev : [selected, ...prev],
-			);
+			setCustomImages((prev) => (prev.includes(selected) ? prev : [selected, ...prev]));
 		}
 	}, [selected]);
 
@@ -508,9 +506,10 @@ export function SettingsPanel({
 
 	// Find selected annotation
 	const selectedAnnotation = useMemo(
-		() => selectedAnnotationId
-			? annotationRegions.find((a) => a.id === selectedAnnotationId) ?? null
-			: null,
+		() =>
+			selectedAnnotationId
+				? (annotationRegions.find((a) => a.id === selectedAnnotationId) ?? null)
+				: null,
 		[selectedAnnotationId, annotationRegions],
 	);
 
@@ -571,9 +570,7 @@ export function SettingsPanel({
 				onTypeChange={handleAnnotationTypeChange}
 				onStyleChange={handleAnnotationStyleChange}
 				onFigureDataChange={
-					onAnnotationFigureDataChange
-						? handleAnnotationFigureDataChange
-						: undefined
+					onAnnotationFigureDataChange ? handleAnnotationFigureDataChange : undefined
 				}
 				onDelete={handleAnnotationDeleteClick}
 			/>
@@ -581,7 +578,7 @@ export function SettingsPanel({
 	}
 
 	return (
-		<div className="flex-[2] min-w-0 bg-[#0B0C10] border border-white/10 rounded-2xl flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.05)] h-full overflow-hidden">
+		<div className="flex-[2] min-w-0 bg-[#1E1E20] border border-black/50 rounded-xl flex flex-col shadow-[0_1px_0_rgba(255,255,255,0.02)] h-full overflow-hidden">
 			<div className="flex-1 overflow-y-auto custom-scrollbar p-4 pb-0">
 				<div className="mb-4">
 					<div className="flex items-center justify-between mb-3">
@@ -612,7 +609,7 @@ export function SettingsPanel({
 										zoomEnabled ? "opacity-100 cursor-pointer" : "opacity-40 cursor-not-allowed",
 										isActive
 											? "border-cyan-400/50 bg-gradient-to-b from-blue-600/60 to-cyan-700/60 text-white shadow-[0_0_15px_rgba(6,182,212,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] scale-105"
-											: "border-white/5 bg-[#11131A] text-slate-400 hover:bg-[#1A1D27] hover:border-white/20 hover:text-slate-200 hover:shadow-[0_0_10px_rgba(255,255,255,0.05)]",
+											: "border-white/5 bg-transparent text-[#A1A1A6] hover:bg-white/5 hover:text-[#EEEEF0] transition-colors",
 									)}
 								>
 									<span className="text-xs font-semibold tracking-wide">{option.label}</span>
@@ -681,7 +678,7 @@ export function SettingsPanel({
 											: "opacity-40 cursor-not-allowed",
 										isActive
 											? "border-orange-400/50 bg-gradient-to-b from-orange-600/60 to-yellow-600/60 text-white shadow-[0_0_15px_rgba(249,115,22,0.4),inset_0_1px_0_rgba(255,255,255,0.2)] scale-105"
-											: "border-white/5 bg-[#11131A] text-slate-400 hover:bg-[#1A1D27] hover:border-white/20 hover:text-slate-200 hover:shadow-[0_0_10px_rgba(255,255,255,0.05)]",
+											: "border-white/5 bg-transparent text-[#A1A1A6] hover:bg-white/5 hover:text-[#EEEEF0] transition-colors",
 									)}
 								>
 									<span className="text-xs font-semibold tracking-wide">{option.label}</span>
@@ -995,19 +992,19 @@ export function SettingsPanel({
 								<TabsList className="mb-2 bg-white/5 border border-white/5 p-0.5 w-full grid grid-cols-3 h-7 rounded-lg">
 									<TabsTrigger
 										value="image"
-										className="data-[state=active]:bg-[#2563EB] data-[state=active]:text-white text-slate-400 text-[10px] py-1 rounded-md transition-all"
+										className="data-[state=active]:bg-[#0A84FF] data-[state=active]:text-white text-[#A1A1A6] text-[11px] py-1 rounded-[6px] font-medium transition-all"
 									>
 										{tSettings("background.image")}
 									</TabsTrigger>
 									<TabsTrigger
 										value="color"
-										className="data-[state=active]:bg-[#2563EB] data-[state=active]:text-white text-slate-400 text-[10px] py-1 rounded-md transition-all"
+										className="data-[state=active]:bg-[#0A84FF] data-[state=active]:text-white text-[#A1A1A6] text-[11px] py-1 rounded-[6px] font-medium transition-all"
 									>
 										{tSettings("background.color")}
 									</TabsTrigger>
 									<TabsTrigger
 										value="gradient"
-										className="data-[state=active]:bg-[#2563EB] data-[state=active]:text-white text-slate-400 text-[10px] py-1 rounded-md transition-all"
+										className="data-[state=active]:bg-[#0A84FF] data-[state=active]:text-white text-[#A1A1A6] text-[11px] py-1 rounded-[6px] font-medium transition-all"
 									>
 										{tSettings("background.gradient")}
 									</TabsTrigger>
@@ -1025,7 +1022,7 @@ export function SettingsPanel({
 										<Button
 											onClick={() => fileInputRef.current?.click()}
 											variant="outline"
-											className="w-full gap-2 bg-white/5 text-slate-200 border-white/10 hover:bg-[#2563EB] hover:text-white hover:border-[#2563EB] transition-all h-7 text-[10px]"
+											className="w-full gap-1.5 bg-white/5 text-[#EEEEF0] border-white/5 hover:bg-[#0A84FF] hover:text-white transition-colors h-7 text-[11px] rounded-[6px]"
 										>
 											<Upload className="w-3 h-3" />
 											{tSettings("background.uploadCustom")}
@@ -1212,7 +1209,7 @@ export function SettingsPanel({
 							<Button
 								onClick={() => setShowCropModal(false)}
 								size="lg"
-								className="bg-[#2563EB] hover:bg-[#2563EB]/90 text-white"
+								className="bg-[#0A84FF] hover:bg-[#007AFF] text-white"
 							>
 								{t("common.actions.done")}
 							</Button>
@@ -1221,7 +1218,7 @@ export function SettingsPanel({
 				</>
 			)}
 
-			<div className="flex-shrink-0 p-5 pt-4 bg-[#080A10] border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+			<div className="flex-shrink-0 p-5 pt-4 bg-[#1E1E20] border-t border-white/5">
 				<div className="flex items-center gap-3 mb-4">
 					<button
 						onClick={() => onExportFormatChange?.("mp4")}
@@ -1343,7 +1340,7 @@ export function SettingsPanel({
 								<Switch
 									checked={gifLoop}
 									onCheckedChange={onGifLoopChange}
-									className="data-[state=checked]:bg-[#2563EB] scale-75"
+									className="data-[state=checked]:bg-[#0A84FF] scale-[0.8]"
 								/>
 							</div>
 						</div>
@@ -1355,7 +1352,7 @@ export function SettingsPanel({
 						type="button"
 						variant="outline"
 						onClick={onLoadProject}
-						className="h-10 text-xs font-semibold gap-2 bg-[#1A1D24] border-white/10 text-slate-300 hover:bg-[#252936] hover:text-white hover:border-white/20 transition-all rounded-xl shadow-sm"
+						className="h-8 text-[12px] font-medium gap-2 bg-white/5 border border-white/5 text-[#EEEEF0] hover:bg-white/10 transition-colors rounded-[8px]"
 					>
 						<FolderOpen className="w-4 h-4" />
 						{tSettings("export.loadProject")}
@@ -1364,7 +1361,7 @@ export function SettingsPanel({
 						type="button"
 						variant="outline"
 						onClick={onSaveProject}
-						className="h-10 text-xs font-semibold gap-2 bg-[#1A1D24] border-white/10 text-slate-300 hover:bg-[#252936] hover:text-white hover:border-white/20 transition-all rounded-xl shadow-sm"
+						className="h-8 text-[12px] font-medium gap-2 bg-white/5 border border-white/5 text-[#EEEEF0] hover:bg-white/10 transition-colors rounded-[8px]"
 					>
 						<Save className="w-4 h-4" />
 						{tSettings("export.saveProject")}
@@ -1372,7 +1369,7 @@ export function SettingsPanel({
 				</div>
 			</div>
 
-			<div className="flex-shrink-0 p-5 pt-4 bg-[#0D0D0D] border-t border-[#2E2E2E]">
+			<div className="flex-shrink-0 p-4 border-t border-white/5">
 				<div className="flex gap-2">
 					<button
 						type="button"
@@ -1381,7 +1378,7 @@ export function SettingsPanel({
 								"https://github.com/usmanasim/klipt/issues/new/choose",
 							);
 						}}
-						className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-[#555] hover:text-[#F2F0ED] py-2 hover:bg-[#1C1C1C] rounded-lg transition-colors"
+						className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-medium text-[#86868B] hover:text-[#EEEEF0] py-2 hover:bg-white/5 rounded-[8px] transition-colors"
 					>
 						<Bug className="w-3.5 h-3.5" />
 						{tSettings("export.reportBug")}
@@ -1391,7 +1388,7 @@ export function SettingsPanel({
 						onClick={() => {
 							window.electronAPI?.openExternalUrl("https://github.com/usmanasim/klipt");
 						}}
-						className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium text-[#555] hover:text-[#F2F0ED] py-2 hover:bg-[#1C1C1C] rounded-lg transition-colors"
+						className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-medium text-[#86868B] hover:text-[#EEEEF0] py-2 hover:bg-white/5 rounded-[8px] transition-colors"
 					>
 						<Star className="w-3.5 h-3.5 text-[#E0000F]" />
 						{tSettings("export.starOnGithub")}
@@ -1401,4 +1398,3 @@ export function SettingsPanel({
 		</div>
 	);
 }
-
