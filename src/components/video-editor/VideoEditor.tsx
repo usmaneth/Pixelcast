@@ -31,6 +31,7 @@ import {
 import { matchesShortcut } from "@/lib/shortcuts";
 import { DEFAULT_WALLPAPER_RELATIVE_PATH } from "@/lib/wallpapers";
 import { type AspectRatio, getAspectRatioValue } from "@/utils/aspectRatioUtils";
+import { CommandPalette } from "./CommandPalette";
 import { ExportDialog } from "./ExportDialog";
 import { loadEditorPreferences, saveEditorPreferences } from "./editorPreferences";
 import PlaybackControls from "./PlaybackControls";
@@ -173,6 +174,7 @@ export default function VideoEditor() {
 	const [exportProgress, setExportProgress] = useState<ExportProgress | null>(null);
 	const [exportError, setExportError] = useState<string | null>(null);
 	const [showExportDialog, setShowExportDialog] = useState(false);
+	const [showCommandPalette, setShowCommandPalette] = useState(false);
 	const [aspectRatio, setAspectRatio] = useState<AspectRatio>(initialEditorPreferences.aspectRatio);
 	const [exportQuality, setExportQuality] = useState<ExportQuality>(
 		initialEditorPreferences.exportQuality,
@@ -1450,6 +1452,13 @@ export default function VideoEditor() {
 			const usesPrimaryModifier = isMac ? e.metaKey : e.ctrlKey;
 			const key = e.key.toLowerCase();
 
+			// Command palette toggle
+			if (usesPrimaryModifier && !e.shiftKey && !e.altKey && key === "k") {
+				e.preventDefault();
+				setShowCommandPalette((prev) => !prev);
+				return;
+			}
+
 			if (usesPrimaryModifier && !e.altKey && key === "z") {
 				if (!isEditableTarget) {
 					e.preventDefault();
@@ -2548,6 +2557,60 @@ export default function VideoEditor() {
 					canRetrySave={hasPendingExportSave}
 					exportFormat={exportFormat}
 					exportedFilePath={exportedFilePath}
+				/>
+
+				<CommandPalette
+					open={showCommandPalette}
+					onClose={() => setShowCommandPalette(false)}
+					onExportMp4={() => {
+						setExportFormat("mp4");
+						handleOpenExportDialog();
+					}}
+					onExportGif={() => {
+						setExportFormat("gif");
+						handleOpenExportDialog();
+					}}
+					onAddZoomRegion={() => {
+						const startMs = currentTime * 1000;
+						const regionDuration = Math.min(2000, (duration - currentTime) * 1000);
+						handleZoomAdded({ start: startMs, end: startMs + regionDuration });
+					}}
+					onAddTrimRegion={() => {
+						const startMs = currentTime * 1000;
+						const regionDuration = Math.min(2000, (duration - currentTime) * 1000);
+						handleTrimAdded({ start: startMs, end: startMs + regionDuration });
+					}}
+					onAddSpeedRegion={() => {
+						const startMs = currentTime * 1000;
+						const regionDuration = Math.min(2000, (duration - currentTime) * 1000);
+						handleSpeedAdded({ start: startMs, end: startMs + regionDuration });
+					}}
+					onAddAnnotation={() => {
+						const startMs = currentTime * 1000;
+						const regionDuration = Math.min(2000, (duration - currentTime) * 1000);
+						handleAnnotationAdded({ start: startMs, end: startMs + regionDuration });
+					}}
+					onPlayPause={() => {
+						const playback = videoPlaybackRef.current;
+						if (playback?.video) {
+							if (playback.video.paused) {
+								playback.play().catch(console.error);
+							} else {
+								playback.pause();
+							}
+						}
+					}}
+					onUndo={handleUndo}
+					onRedo={handleRedo}
+					onEnhanceAudio={() => {
+						toast.info("Open the Settings panel to enhance audio.");
+					}}
+					onGenerateThumbnails={() => {
+						toast.info("Open the Settings panel to generate thumbnails.");
+					}}
+					onSaveProject={() => void handleSaveProject()}
+					onLoadProject={() => void handleLoadProject()}
+					onOpenRecordingsFolder={() => void openRecordingsFolder()}
 				/>
 			</div>
 		</TooltipProvider>

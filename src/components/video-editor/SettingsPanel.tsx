@@ -3,22 +3,24 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
 	Bug,
 	Crop,
+	Download,
 	Film,
 	FolderOpen,
 	Image,
 	Mic,
+	Palette,
 	Save,
 	Star,
-	Trash2,
 	Upload,
+	Volume2,
 	X,
+	Zap,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { BgMode } from "@/lib/ai/backgroundRemoval";
@@ -245,14 +247,13 @@ const TAB_ANIMATION = {
 	transition: { duration: 0.15, ease: "easeOut" as const },
 };
 
-/** Section header: 11px uppercase tracking-wider text-white/40 with Separator */
+/** Section header: 8px bold uppercase tracking-[0.12em] text-white/20 */
 function SectionHeader({ children }: { children: React.ReactNode }) {
 	return (
-		<div className="mb-3">
-			<span className="text-[11px] uppercase tracking-wider font-medium text-white/40">
+		<div className="mb-[10px]">
+			<span className="text-[8px] font-bold uppercase tracking-[0.12em] text-white/20">
 				{children}
 			</span>
-			<Separator className="mt-1.5 bg-white/[0.06]" />
 		</div>
 	);
 }
@@ -594,36 +595,67 @@ export function SettingsPanel({
 		);
 	}
 
+	const TAB_ICONS: Record<SettingsTab, React.ReactNode> = {
+		style: <Palette className="w-3.5 h-3.5" />,
+		motion: <Zap className="w-3.5 h-3.5" />,
+		audio: <Volume2 className="w-3.5 h-3.5" />,
+		export: <Download className="w-3.5 h-3.5" />,
+	};
+
 	return (
 		<div
-			className="flex-[2] min-w-[340px] max-w-[420px] flex flex-col h-full overflow-hidden relative rounded-tr-2xl rounded-br-2xl"
+			className="flex-[2] min-w-0 flex flex-col h-full overflow-hidden relative rounded-tr-2xl rounded-br-2xl"
 			style={{
 				background: "#111113",
 				borderLeft: "1px solid rgba(255,255,255,0.06)",
 			}}
 		>
-			{/* Top tab navigation */}
+			{/* Top tab navigation — floating glow pills */}
 			<div className="flex-shrink-0 px-4 pt-4 pb-0">
 				<div className="flex items-center justify-between mb-3">
 					<span className="text-[13px] font-semibold text-white/90 tracking-tight">Settings</span>
 					<KeyboardShortcutsHelp />
 				</div>
 
-				<div className="flex gap-1 p-1 rounded-xl bg-white/[0.04]">
-					{(["style", "motion", "audio", "export"] as const).map((tab) => (
-						<button
-							key={tab}
-							onClick={() => setActiveTab(tab)}
-							className={cn(
-								"flex-1 py-1.5 px-2 rounded-lg text-[11px] font-medium capitalize transition-all duration-150",
-								activeTab === tab
-									? "bg-white/[0.08] text-white shadow-sm"
-									: "text-white/40 hover:text-white/60 hover:bg-white/[0.03]",
-							)}
-						>
-							{tab}
-						</button>
-					))}
+				<div className="flex gap-[6px]">
+					{(["style", "motion", "audio", "export"] as const).map((tab) => {
+						const isActive = activeTab === tab;
+						return (
+							<button
+								key={tab}
+								onClick={() => setActiveTab(tab)}
+								className={cn(
+									"relative flex items-center gap-1.5 rounded-full text-[11px] font-medium capitalize transition-all duration-200",
+									isActive
+										? "text-[#E0000F]"
+										: "text-white/20 hover:text-white/40",
+								)}
+								style={
+									isActive
+										? {
+												background: "rgba(224,0,15,0.08)",
+												border: "1px solid rgba(224,0,15,0.2)",
+												boxShadow: "0 0 16px rgba(224,0,15,0.1)",
+												padding: "8px 16px",
+											}
+										: {
+												background: "transparent",
+												border: "1px solid rgba(255,255,255,0.04)",
+												padding: "8px 16px",
+											}
+								}
+							>
+								{TAB_ICONS[tab]}
+								{tab}
+								{isActive && (
+									<span
+										className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-[60%] rounded-full"
+										style={{ background: "#E0000F" }}
+									/>
+								)}
+							</button>
+						);
+					})}
 				</div>
 			</div>
 
@@ -799,69 +831,81 @@ export function SettingsPanel({
 								{/* Border Radius, Padding, Shadow */}
 								<div>
 									<SectionHeader>{tSettings("effects.title")}</SectionHeader>
-									<div className="grid grid-cols-2 gap-2">
-										<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-											<SliderControl
-												label={tSettings("effects.roundness")}
-												value={borderRadius}
-												defaultValue={12.5}
-												min={0}
-												max={25}
-												step={0.5}
-												onChange={(v) => onBorderRadiusChange?.(v)}
-												formatValue={(v) => `${v}px`}
-												parseInput={(t) => parseFloat(t.replace(/px$/, ""))}
-												accentColor="blue"
-											/>
+									<div className="space-y-0">
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.roundness")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
+												<SliderControl
+													label={tSettings("effects.roundness")}
+													value={borderRadius}
+													defaultValue={12.5}
+													min={0}
+													max={25}
+													step={0.5}
+													onChange={(v) => onBorderRadiusChange?.(v)}
+													formatValue={(v) => `${v}px`}
+													parseInput={(t) => parseFloat(t.replace(/px$/, ""))}
+													accentColor="blue"
+												/>
+											</div>
 										</div>
-										<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-											<SliderControl
-												label={tSettings("effects.padding")}
-												value={padding}
-												defaultValue={50}
-												min={0}
-												max={100}
-												step={1}
-												onChange={(v) => onPaddingChange?.(v)}
-												formatValue={(v) => `${v}%`}
-												parseInput={(t) => parseFloat(t.replace(/%$/, ""))}
-												accentColor="blue"
-											/>
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.padding")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
+												<SliderControl
+													label={tSettings("effects.padding")}
+													value={padding}
+													defaultValue={50}
+													min={0}
+													max={100}
+													step={1}
+													onChange={(v) => onPaddingChange?.(v)}
+													formatValue={(v) => `${v}%`}
+													parseInput={(t) => parseFloat(t.replace(/%$/, ""))}
+													accentColor="blue"
+												/>
+											</div>
 										</div>
-										<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-											<SliderControl
-												label={tSettings("effects.shadow")}
-												value={shadowIntensity}
-												defaultValue={0}
-												min={0}
-												max={1}
-												step={0.01}
-												onChange={(v) => onShadowChange?.(v)}
-												formatValue={(v) => `${Math.round(v * 100)}%`}
-												parseInput={(t) => parseFloat(t.replace(/%$/, "")) / 100}
-												accentColor="blue"
-											/>
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.shadow")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
+												<SliderControl
+													label={tSettings("effects.shadow")}
+													value={shadowIntensity}
+													defaultValue={0}
+													min={0}
+													max={1}
+													step={0.01}
+													onChange={(v) => onShadowChange?.(v)}
+													formatValue={(v) => `${Math.round(v * 100)}%`}
+													parseInput={(t) => parseFloat(t.replace(/%$/, "")) / 100}
+													accentColor="blue"
+												/>
+											</div>
 										</div>
-										<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-											<SliderControl
-												label={tSettings("effects.backgroundBlur")}
-												value={backgroundBlur}
-												defaultValue={0}
-												min={0}
-												max={8}
-												step={0.25}
-												onChange={(v) => onBackgroundBlurChange?.(v)}
-												formatValue={(v) => `${v.toFixed(1)}px`}
-												parseInput={(t) => parseFloat(t.replace(/px$/, ""))}
-												accentColor="blue"
-											/>
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.backgroundBlur")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
+												<SliderControl
+													label={tSettings("effects.backgroundBlur")}
+													value={backgroundBlur}
+													defaultValue={0}
+													min={0}
+													max={8}
+													step={0.25}
+													onChange={(v) => onBackgroundBlurChange?.(v)}
+													formatValue={(v) => `${v.toFixed(1)}px`}
+													parseInput={(t) => parseFloat(t.replace(/px$/, ""))}
+													accentColor="blue"
+												/>
+											</div>
 										</div>
 									</div>
 								</div>
 
 								{/* Remove Background toggle */}
-								<div className="flex items-center justify-between py-2 px-3 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-									<span className="text-[11px] font-medium text-white/60">
+								<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+									<span className="text-[10px] text-white/40">
 										{tSettings("effects.removeBackground")}
 									</span>
 									<Switch
@@ -881,7 +925,7 @@ export function SettingsPanel({
 												removeBackgroundStateRef.current = null;
 											}
 										}}
-										className="data-[state=checked]:bg-red-500 scale-90"
+										className="data-[state=checked]:bg-[#E0000F] data-[state=checked]:shadow-[0_0_8px_rgba(224,0,15,0.25)] data-[state=unchecked]:bg-white/[0.08] scale-90"
 									/>
 								</div>
 
@@ -937,184 +981,243 @@ export function SettingsPanel({
 						{/* ===== MOTION TAB ===== */}
 						{activeTab === "motion" && (
 							<motion.div key="motion" {...TAB_ANIMATION} className="space-y-5">
-								{/* Zoom Controls */}
-								<div>
-									<SectionHeader>{tSettings("zoom.level")}</SectionHeader>
-									{zoomEnabled && selectedZoomDepth && (
-										<div className="mb-2">
-											<span className="text-[10px] uppercase tracking-wider font-medium text-white/30">
-												Active:{" "}
-												<span className="text-white/60">
-													{ZOOM_DEPTH_OPTIONS.find((o) => o.depth === selectedZoomDepth)?.label}
-												</span>
-											</span>
+								{/* Zoom Contextual Card */}
+								{zoomEnabled && selectedZoomDepth && (
+									<div
+										className="rounded-[14px]"
+										style={{
+											background: "rgba(224,0,15,0.03)",
+											border: "1px solid rgba(224,0,15,0.1)",
+											padding: "14px",
+										}}
+									>
+										<div className="flex items-center gap-2 mb-3">
+											<span className="w-2 h-2 rounded-full bg-[#E0000F]" />
+											<span className="text-[10px] font-medium text-white/60">Zoom Region</span>
 										</div>
-									)}
-									<div className="grid grid-cols-6 gap-1.5">
-										{ZOOM_DEPTH_OPTIONS.map((option) => {
-											const isActive = selectedZoomDepth === option.depth;
-											return (
+
+										{/* Zoom depth grid — 6 columns */}
+										<div className="grid grid-cols-6 gap-[3px]">
+											{ZOOM_DEPTH_OPTIONS.map((option) => {
+												const isActive = selectedZoomDepth === option.depth;
+												return (
+													<button
+														key={option.depth}
+														type="button"
+														onClick={() => onZoomDepthChange?.(option.depth)}
+														className={cn(
+															"py-[6px] text-center rounded-md transition-all duration-150 text-[9px]",
+															isActive
+																? "bg-white/[0.08] text-white font-semibold"
+																: "bg-white/[0.03] text-white/30",
+														)}
+														style={isActive ? { border: "1px solid rgba(255,255,255,0.15)" } : { border: "1px solid transparent" }}
+													>
+														{option.label}
+													</button>
+												);
+											})}
+										</div>
+
+										<div className="flex justify-end mt-3">
+											<button
+												onClick={handleDeleteClick}
+												className="text-[10px] text-[#E0000F]/40 hover:text-[#E0000F]/70 transition-colors duration-150"
+											>
+												Delete region
+											</button>
+										</div>
+									</div>
+								)}
+
+								{/* Zoom Controls (when no region selected) */}
+								{!zoomEnabled && (
+									<div>
+										<SectionHeader>{tSettings("zoom.level")}</SectionHeader>
+										<div className="grid grid-cols-6 gap-[3px]">
+											{ZOOM_DEPTH_OPTIONS.map((option) => (
 												<button
 													key={option.depth}
 													type="button"
-													disabled={!zoomEnabled}
-													onClick={() => onZoomDepthChange?.(option.depth)}
-													className={cn(
-														"h-8 w-full rounded-lg border text-center transition-all duration-150",
-														zoomEnabled ? "cursor-pointer" : "opacity-30 cursor-not-allowed",
-														isActive
-															? "border-white/20 bg-white/[0.08] text-white"
-															: "border-transparent bg-transparent text-white/30 hover:bg-white/[0.04] hover:text-white/50",
-													)}
+													disabled
+													className="py-[6px] text-center rounded-md text-[9px] bg-white/[0.03] text-white/30 opacity-30 cursor-not-allowed"
+													style={{ border: "1px solid transparent" }}
 												>
-													<span className="text-[11px] font-medium">{option.label}</span>
+													{option.label}
 												</button>
-											);
-										})}
-									</div>
-									{!zoomEnabled && (
+											))}
+										</div>
 										<p className="text-[10px] text-white/20 mt-2 text-center">
 											{tSettings("zoom.selectRegion")}
 										</p>
-									)}
-									{zoomEnabled && (
-										<button
-											onClick={handleDeleteClick}
-											className="mt-2.5 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-medium text-red-400 bg-red-500/[0.05] hover:bg-red-500/[0.1] border border-transparent hover:border-red-500/20 transition-all duration-150"
-										>
-											<Trash2 className="w-3 h-3" />
-											{tSettings("zoom.deleteZoom")}
-										</button>
-									)}
-								</div>
+									</div>
+								)}
 
 								{/* Zoom Motion Settings */}
 								<div>
 									<SectionHeader>Zoom Settings</SectionHeader>
-									<div className="grid grid-cols-2 gap-2">
-										<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-											<SliderControl
-												label={tSettings("effects.zoomMotionBlur")}
-												value={zoomMotionBlur}
-												defaultValue={DEFAULT_ZOOM_MOTION_BLUR}
-												min={0}
-												max={2}
-												step={0.05}
-												onChange={(v) => onZoomMotionBlurChange?.(v)}
-												formatValue={(v) => `${v.toFixed(2)}\u00d7`}
-												parseInput={(t) => parseFloat(t.replace(/\u00d7$/, ""))}
-												accentColor="green"
-											/>
+									<div className="space-y-0">
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.zoomMotionBlur")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
+												<SliderControl
+													label={tSettings("effects.zoomMotionBlur")}
+													value={zoomMotionBlur}
+													defaultValue={DEFAULT_ZOOM_MOTION_BLUR}
+													min={0}
+													max={2}
+													step={0.05}
+													onChange={(v) => onZoomMotionBlurChange?.(v)}
+													formatValue={(v) => `${v.toFixed(2)}\u00d7`}
+													parseInput={(t) => parseFloat(t.replace(/\u00d7$/, ""))}
+													accentColor="green"
+												/>
+											</div>
 										</div>
-										<div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-											<span className="text-[10px] font-medium text-white/50">
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">
 												{tSettings("effects.connectZooms")}
 											</span>
 											<Switch
 												checked={connectZooms}
 												onCheckedChange={onConnectZoomsChange}
-												className="data-[state=checked]:bg-cyan-500 scale-90"
+												className="data-[state=checked]:bg-[#E0000F] data-[state=checked]:shadow-[0_0_8px_rgba(224,0,15,0.25)] data-[state=unchecked]:bg-white/[0.08] scale-90"
 											/>
 										</div>
 									</div>
 								</div>
 
-								{/* Speed Controls */}
-								<div>
-									<SectionHeader>{tSettings("speed.playbackSpeed")}</SectionHeader>
-									{selectedSpeedId && selectedSpeedValue && (
-										<div className="mb-2">
-											<span className="text-[10px] uppercase tracking-wider font-medium text-white/30">
-												Active:{" "}
-												<span className="text-white/60">
-													{SPEED_OPTIONS.find((o) => o.speed === selectedSpeedValue)?.label ??
-														`${selectedSpeedValue}\u00d7`}
-												</span>
-											</span>
+								{/* Speed Contextual Card */}
+								{selectedSpeedId && selectedSpeedValue && (
+									<div
+										className="rounded-[14px]"
+										style={{
+											background: "rgba(224,0,15,0.03)",
+											border: "1px solid rgba(224,0,15,0.1)",
+											padding: "14px",
+										}}
+									>
+										<div className="flex items-center gap-2 mb-3">
+											<span className="w-2 h-2 rounded-full bg-[#E0000F]" />
+											<span className="text-[10px] font-medium text-white/60">Speed Region</span>
 										</div>
-									)}
-									<div className="grid grid-cols-7 gap-1.5">
-										{SPEED_OPTIONS.map((option) => {
-											const isActive = selectedSpeedValue === option.speed;
-											return (
+
+										{/* Speed pills — outlined, flex row */}
+										<div className="flex gap-[4px]">
+											{SPEED_OPTIONS.map((option) => {
+												const isActive = selectedSpeedValue === option.speed;
+												return (
+													<button
+														key={option.speed}
+														type="button"
+														onClick={() => onSpeedChange?.(option.speed)}
+														className={cn(
+															"px-3 py-1.5 rounded-full text-[10px] transition-all duration-150",
+															isActive
+																? "bg-[#E0000F] border-[#E0000F] text-white font-semibold"
+																: "bg-transparent text-white/35",
+														)}
+														style={
+															isActive
+																? { border: "1px solid #E0000F" }
+																: { border: "1px solid rgba(255,255,255,0.08)" }
+														}
+													>
+														{option.label}
+													</button>
+												);
+											})}
+										</div>
+
+										<div className="flex justify-end mt-3">
+											<button
+												onClick={handleSpeedDeleteClick}
+												className="text-[10px] text-[#E0000F]/40 hover:text-[#E0000F]/70 transition-colors duration-150"
+											>
+												Delete region
+											</button>
+										</div>
+									</div>
+								)}
+
+								{/* Speed Controls (when no region selected) */}
+								{!selectedSpeedId && (
+									<div>
+										<SectionHeader>{tSettings("speed.playbackSpeed")}</SectionHeader>
+										<div className="flex gap-[4px]">
+											{SPEED_OPTIONS.map((option) => (
 												<button
 													key={option.speed}
 													type="button"
-													disabled={!selectedSpeedId}
-													onClick={() => onSpeedChange?.(option.speed)}
-													className={cn(
-														"h-8 w-full rounded-lg border text-center transition-all duration-150",
-														selectedSpeedId
-															? "cursor-pointer"
-															: "opacity-30 cursor-not-allowed",
-														isActive
-															? "border-white/20 bg-white/[0.08] text-white"
-															: "border-transparent bg-transparent text-white/30 hover:bg-white/[0.04] hover:text-white/50",
-													)}
+													disabled
+													className="px-3 py-1.5 rounded-full text-[10px] bg-transparent text-white/35 opacity-30 cursor-not-allowed"
+													style={{ border: "1px solid rgba(255,255,255,0.08)" }}
 												>
-													<span className="text-[11px] font-medium">{option.label}</span>
+													{option.label}
 												</button>
-											);
-										})}
-									</div>
-									{!selectedSpeedId && (
+											))}
+										</div>
 										<p className="text-[10px] text-white/20 mt-2 text-center">
 											{tSettings("speed.selectRegion")}
 										</p>
-									)}
-									{selectedSpeedId && (
-										<button
-											onClick={handleSpeedDeleteClick}
-											className="mt-2.5 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-medium text-red-400 bg-red-500/[0.05] hover:bg-red-500/[0.1] border border-transparent hover:border-red-500/20 transition-all duration-150"
-										>
-											<Trash2 className="w-3 h-3" />
-											{tSettings("speed.deleteRegion")}
-										</button>
-									)}
-								</div>
+									</div>
+								)}
 
-								{/* Trim delete */}
+								{/* Trim Contextual Card */}
 								{trimEnabled && (
-									<div>
-										<SectionHeader>Trim</SectionHeader>
-										<button
-											onClick={handleTrimDeleteClick}
-											className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-medium text-red-400 bg-red-500/[0.05] hover:bg-red-500/[0.1] border border-transparent hover:border-red-500/20 transition-all duration-150"
-										>
-											<Trash2 className="w-3 h-3" />
-											{tSettings("trim.deleteRegion")}
-										</button>
+									<div
+										className="rounded-[14px]"
+										style={{
+											background: "rgba(224,0,15,0.03)",
+											border: "1px solid rgba(224,0,15,0.1)",
+											padding: "14px",
+										}}
+									>
+										<div className="flex items-center gap-2 mb-3">
+											<span className="w-2 h-2 rounded-full bg-[#E0000F]" />
+											<span className="text-[10px] font-medium text-white/60">Trim Region</span>
+										</div>
+										<div className="flex justify-end">
+											<button
+												onClick={handleTrimDeleteClick}
+												className="text-[10px] text-[#E0000F]/40 hover:text-[#E0000F]/70 transition-colors duration-150"
+											>
+												Delete region
+											</button>
+										</div>
 									</div>
 								)}
 
 								{/* Cursor Effects */}
 								<div>
 									<SectionHeader>Cursor</SectionHeader>
-									<div className="space-y-2">
-										<div className="grid grid-cols-2 gap-2">
-											<div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-												<span className="text-[10px] font-medium text-white/50">
+									<div className="space-y-0">
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<div className="flex items-center gap-2">
+												<span className="text-[10px] text-white/40">
 													{tSettings("effects.showCursor")}
 												</span>
-												<Switch
-													checked={showCursor}
-													onCheckedChange={onShowCursorChange}
-													className="data-[state=checked]:bg-blue-500 scale-90"
-												/>
+												<kbd className="px-1 py-[1px] text-[7px] font-mono text-white/20 rounded-[3px]" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>C</kbd>
 											</div>
-											<div className="flex items-center justify-between px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-												<span className="text-[10px] font-medium text-white/50">
-													{tSettings("effects.loopCursor")}
-												</span>
-												<Switch
-													checked={loopCursor}
-													onCheckedChange={onLoopCursorChange}
-													className="data-[state=checked]:bg-blue-500 scale-90"
-												/>
-											</div>
+											<Switch
+												checked={showCursor}
+												onCheckedChange={onShowCursorChange}
+												className="data-[state=checked]:bg-[#E0000F] data-[state=checked]:shadow-[0_0_8px_rgba(224,0,15,0.25)] data-[state=unchecked]:bg-white/[0.08] scale-90"
+											/>
 										</div>
-										<div className="grid grid-cols-2 gap-2">
-											<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">
+												{tSettings("effects.loopCursor")}
+											</span>
+											<Switch
+												checked={loopCursor}
+												onCheckedChange={onLoopCursorChange}
+												className="data-[state=checked]:bg-[#E0000F] data-[state=checked]:shadow-[0_0_8px_rgba(224,0,15,0.25)] data-[state=unchecked]:bg-white/[0.08] scale-90"
+											/>
+										</div>
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.cursorSize")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
 												<SliderControl
 													label={tSettings("effects.cursorSize")}
 													value={cursorSize}
@@ -1128,7 +1231,10 @@ export function SettingsPanel({
 													accentColor="purple"
 												/>
 											</div>
-											<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+										</div>
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.cursorSmoothing")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
 												<SliderControl
 													label={tSettings("effects.cursorSmoothing")}
 													value={cursorSmoothing}
@@ -1143,8 +1249,9 @@ export function SettingsPanel({
 												/>
 											</div>
 										</div>
-										<div className="grid grid-cols-2 gap-2">
-											<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.cursorMotionBlur")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
 												<SliderControl
 													label={tSettings("effects.cursorMotionBlur")}
 													value={cursorMotionBlur}
@@ -1158,7 +1265,10 @@ export function SettingsPanel({
 													accentColor="purple"
 												/>
 											</div>
-											<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+										</div>
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.cursorClickBounce")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
 												<SliderControl
 													label={tSettings("effects.cursorClickBounce")}
 													value={cursorClickBounce}
@@ -1173,8 +1283,9 @@ export function SettingsPanel({
 												/>
 											</div>
 										</div>
-										<div className="grid grid-cols-2 gap-2">
-											<div className="p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
+										<div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+											<span className="text-[10px] text-white/40">{tSettings("effects.cursorSway")}</span>
+											<div className="flex-1 max-w-[180px] ml-4">
 												<SliderControl
 													label={tSettings("effects.cursorSway")}
 													value={toCursorSwaySliderValue(cursorSway)}
@@ -1335,47 +1446,69 @@ export function SettingsPanel({
 													<Switch
 														checked={gifLoop}
 														onCheckedChange={onGifLoopChange}
-														className="data-[state=checked]:bg-white scale-90"
+														className="data-[state=checked]:bg-[#E0000F] data-[state=checked]:shadow-[0_0_8px_rgba(224,0,15,0.25)] data-[state=unchecked]:bg-white/[0.08] scale-90"
 													/>
 												</div>
 											</div>
 										</div>
 									</div>
 								)}
-
-								{/* Project Load/Save */}
-								<div>
-									<SectionHeader>Project</SectionHeader>
-									<div className="grid grid-cols-2 gap-2">
-										<button
-											onClick={onLoadProject}
-											className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/[0.06] text-[11px] font-medium text-white/50 hover:text-white/70 hover:bg-white/[0.03] hover:border-white/[0.1] transition-all duration-150"
-										>
-											<FolderOpen className="w-3.5 h-3.5" />
-											{tSettings("export.loadProject")}
-										</button>
-										<button
-											onClick={onSaveProject}
-											className="flex items-center justify-center gap-2 py-2.5 rounded-xl border border-white/[0.06] text-[11px] font-medium text-white/50 hover:text-white/70 hover:bg-white/[0.03] hover:border-white/[0.1] transition-all duration-150"
-										>
-											<Save className="w-3.5 h-3.5" />
-											{tSettings("export.saveProject")}
-										</button>
-									</div>
-								</div>
-
-								{/* Export Button */}
-								<button
-									onClick={_onExport}
-									className="w-full py-3 rounded-xl bg-white text-black font-semibold text-[13px] hover:bg-white/90 transition-all duration-150 active:scale-[0.98]"
-								>
-									Export
-								</button>
 							</motion.div>
 						)}
 					</AnimatePresence>
 				</div>
 			</ScrollArea>
+
+			{/* Export section — pinned to bottom */}
+			{activeTab === "export" && (
+				<div className="flex-shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.04)", padding: "12px 14px" }}>
+					{/* Split export button */}
+					<div className="flex mb-2" style={{ gap: "1px" }}>
+						<button
+							onClick={_onExport}
+							className="flex-1 text-white font-semibold text-[13px] active:scale-[0.98] transition-all duration-150"
+							style={{
+								padding: "10px",
+								borderRadius: "10px 0 0 10px",
+								background: "linear-gradient(135deg, #E0000F, #FF4500)",
+								boxShadow: "0 4px 16px rgba(224,0,15,0.25)",
+							}}
+						>
+							Export
+						</button>
+						<button
+							className="flex items-center justify-center text-white/80"
+							style={{
+								width: "38px",
+								borderRadius: "0 10px 10px 0",
+								background: "linear-gradient(135deg, #C0000D, #E03D00)",
+							}}
+						>
+							&#9662;
+						</button>
+					</div>
+
+					{/* Load / Save secondary buttons */}
+					<div className="grid grid-cols-2 gap-2">
+						<button
+							onClick={onLoadProject}
+							className="flex items-center justify-center gap-1.5 py-2 rounded-lg text-[9px] text-white/30 hover:text-white/50 transition-all duration-150"
+							style={{ border: "1px solid rgba(255,255,255,0.06)" }}
+						>
+							<FolderOpen className="w-3 h-3" />
+							{tSettings("export.loadProject")}
+						</button>
+						<button
+							onClick={onSaveProject}
+							className="flex items-center justify-center gap-1.5 py-2 rounded-lg text-[9px] text-white/30 hover:text-white/50 transition-all duration-150"
+							style={{ border: "1px solid rgba(255,255,255,0.06)" }}
+						>
+							<Save className="w-3 h-3" />
+							{tSettings("export.saveProject")}
+						</button>
+					</div>
+				</div>
+			)}
 
 			{/* Crop Modal */}
 			{showCropModal && cropRegion && onCropChange && (
