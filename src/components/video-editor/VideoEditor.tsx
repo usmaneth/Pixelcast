@@ -2184,34 +2184,25 @@ export default function VideoEditor() {
 
 	return (
 		<TooltipProvider delayDuration={300}>
-			<div className="flex flex-col h-screen bg-[#050508] text-[#F2F0ED] overflow-hidden relative selection:bg-[#E0000F]/30 font-sans">
-				{/* Spatial Canvas Background — ambient light orbs */}
-				<div className="absolute top-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-[#E0000F] opacity-[0.06] blur-[150px] pointer-events-none z-0" />
-				<div className="absolute bottom-[-15%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-[#0A84FF] opacity-[0.05] blur-[120px] pointer-events-none z-0" />
-				<div className="absolute top-[30%] left-[35%] w-[30vw] h-[30vw] rounded-full bg-[#BF5AF2] opacity-[0.03] blur-[100px] pointer-events-none z-0" />
-				{/* Noise texture overlay */}
-				<div
-					className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none z-0"
-					style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "256px 256px" }}
-				/>
+			<div className="flex flex-col h-screen bg-[#050508] relative overflow-hidden text-[#F2F0ED] selection:bg-[#E0000F]/30 font-sans">
+				{/* Ambient orbs (z-0) */}
+				<div className="absolute top-[-10%] right-[-10%] w-[45vw] h-[45vw] rounded-full bg-[#E0000F] opacity-[0.05] blur-[150px] pointer-events-none mix-blend-screen z-0" />
+				<div className="absolute bottom-[-15%] left-[-10%] w-[35vw] h-[35vw] rounded-full bg-[#0A84FF] opacity-[0.04] blur-[120px] pointer-events-none mix-blend-screen z-0" />
+				<div className="absolute top-[30%] right-[10%] w-[25vw] h-[25vw] rounded-full bg-[#BF5AF2] opacity-[0.03] blur-[100px] pointer-events-none mix-blend-screen z-0" />
 
-				{/* Floating Pill Toolbar */}
+				{/* Ultra-Compact Floating Toolbar Pill (z-50) */}
 				<div
-					className="relative mx-3 mt-2 h-12 flex-shrink-0 backdrop-blur-xl rounded-2xl flex items-center justify-between px-4 z-50"
-					style={{ WebkitAppRegion: "drag", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", boxShadow: "0 4px 20px rgba(0,0,0,0.3)" } as React.CSSProperties}
+					className="relative mx-3 mt-2 inline-flex h-10 flex-shrink-0 items-center backdrop-blur-xl rounded-2xl px-3 z-50"
+					style={{ WebkitAppRegion: "drag", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)", boxShadow: "0 4px 16px rgba(0,0,0,0.3)" } as React.CSSProperties}
 				>
-					{/* Left: Logo + Undo/Redo */}
-					<div className="flex items-center gap-3" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
-						<div className="flex items-center gap-2 select-none">
-							<div className="w-4 h-4 relative flex items-center justify-center">
-								<div className="absolute w-2.5 h-2.5 border-[1.5px] border-white/10 rounded-[2px] transform rotate-12" />
-								<div className="absolute w-2.5 h-2.5 border-[1.5px] border-white/20 rounded-[2px] transform -rotate-12" />
-								<div className="absolute w-2.5 h-2.5 bg-[#E0000F] rounded-[2px] transform rotate-45 shadow-[0_0_6px_rgba(224,0,15,0.4)]" />
-							</div>
-							<span className="text-[13px] font-medium tracking-[-0.03em] text-white/80">klipt</span>
+					{/* Left: Logo + Undo/Redo + Project Name */}
+					<div className="flex items-center gap-2" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+						<div className="flex items-center gap-1.5 select-none">
+							<div className="w-[6px] h-[6px] rounded-[1px] bg-[#E0000F]" />
+							<span className="text-[9px] font-medium tracking-[-0.03em] text-white/80">klipt</span>
 						</div>
 
-						<Separator orientation="vertical" className="h-4 bg-white/10" />
+						<Separator orientation="vertical" className="h-3 bg-white/[0.08]" />
 
 						<div className="flex items-center gap-0.5">
 							<Tooltip>
@@ -2219,9 +2210,9 @@ export default function VideoEditor() {
 									<button
 										onClick={handleUndo}
 										disabled={historyPastRef.current.length === 0}
-										className="h-7 w-7 flex items-center justify-center rounded-md text-white/30 hover:text-white/60 disabled:opacity-20 disabled:hover:text-white/30 transition-colors"
+										className="h-6 w-6 flex items-center justify-center rounded-md text-white/20 hover:text-white/50 disabled:opacity-20 disabled:hover:text-white/20 transition-colors"
 									>
-										<Undo2 className="w-3.5 h-3.5" />
+										<Undo2 className="w-3 h-3" />
 									</button>
 								</TooltipTrigger>
 								<TooltipContent side="bottom" className="bg-[#1a1a1e] border-white/10 text-white/70 text-xs">
@@ -2233,9 +2224,9 @@ export default function VideoEditor() {
 									<button
 										onClick={handleRedo}
 										disabled={historyFutureRef.current.length === 0}
-										className="h-7 w-7 flex items-center justify-center rounded-md text-white/30 hover:text-white/60 disabled:opacity-20 disabled:hover:text-white/30 transition-colors"
+										className="h-6 w-6 flex items-center justify-center rounded-md text-white/20 hover:text-white/50 disabled:opacity-20 disabled:hover:text-white/20 transition-colors"
 									>
-										<Redo2 className="w-3.5 h-3.5" />
+										<Redo2 className="w-3 h-3" />
 									</button>
 								</TooltipTrigger>
 								<TooltipContent side="bottom" className="bg-[#1a1a1e] border-white/10 text-white/70 text-xs">
@@ -2243,22 +2234,21 @@ export default function VideoEditor() {
 								</TooltipContent>
 							</Tooltip>
 						</div>
-					</div>
 
-					{/* Center: Project Name */}
-					<div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
-						<div className="flex items-center gap-2">
-							<span className="text-[13px] font-medium text-white/70">
+						<Separator orientation="vertical" className="h-3 bg-white/[0.08]" />
+
+						<div className="flex items-center gap-1.5">
+							<span className="text-[9px] text-white/40">
 								{currentProjectPath ? currentProjectPath.split(/[\\/]/).pop()?.replace(/\.[^.]+$/, "") : "Untitled Project"}
 							</span>
 							{hasUnsavedChanges && (
-								<div className="w-1.5 h-1.5 rounded-full bg-[#E0000F] flex-shrink-0" />
+								<div className="w-[6px] h-[6px] rounded-full bg-[#E0000F] flex-shrink-0" />
 							)}
 						</div>
 					</div>
 
 					{/* Right: Actions + Export */}
-					<div className="flex items-center gap-2" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
+					<div className="flex items-center gap-2 ml-auto" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
 						<LanguageSwitcher />
 
 						<Tooltip>
@@ -2266,9 +2256,9 @@ export default function VideoEditor() {
 								<button
 									type="button"
 									onClick={() => void openRecordingsFolder()}
-									className="h-7 w-7 flex items-center justify-center rounded-md text-white/30 hover:text-white/60 transition-colors"
+									className="h-6 w-6 flex items-center justify-center rounded-md text-white/20 hover:text-white/50 transition-colors"
 								>
-									<FolderOpen className="h-3.5 w-3.5" />
+									<FolderOpen className="h-3 w-3" />
 								</button>
 							</TooltipTrigger>
 							<TooltipContent side="bottom" className="bg-[#1a1a1e] border-white/10 text-white/70 text-xs">
@@ -2276,40 +2266,37 @@ export default function VideoEditor() {
 							</TooltipContent>
 						</Tooltip>
 
-						<button className="h-7 px-2.5 rounded-md flex items-center gap-1.5 text-white/50 hover:text-white/70 transition-colors text-[12px] font-medium">
-							<Share className="w-3 h-3" />
+						<button className="h-6 px-2 rounded-md flex items-center gap-1 text-white/20 hover:text-white/50 transition-colors text-[9px] font-medium">
+							<Share className="w-2.5 h-2.5" />
 							Share
 						</button>
 
 						<button
 							onClick={handleOpenExportDialog}
 							disabled={isExporting}
-							className="h-8 px-5 flex items-center gap-2 rounded-xl bg-white text-black text-[13px] font-semibold hover:bg-white/90 active:bg-white/80 transition-all disabled:opacity-50 disabled:pointer-events-none"
+							className="h-6 px-3 flex items-center gap-1.5 rounded-lg bg-white text-black text-[8px] font-semibold hover:bg-white/90 active:bg-white/80 transition-all disabled:opacity-50 disabled:pointer-events-none"
 						>
-							<Download className="w-3.5 h-3.5" />
+							<Download className="w-2.5 h-2.5" />
 							Export
 						</button>
 					</div>
 				</div>
 
-				{/* Content area */}
-				<div className="flex-1 py-2 px-3 gap-3 flex min-h-0 relative z-10">
-					{/* Left Column - Video & Timeline */}
-					<div className="flex-[7] flex flex-col gap-3 min-w-0 h-full">
-						<PanelGroup direction="vertical" className="gap-3">
-							{/* Top section: video preview and controls */}
-							<Panel defaultSize={70} minSize={40}>
-								<div
-									className="w-full h-full flex flex-col items-center justify-center relative rounded-2xl p-1"
-									style={{ border: "1px solid rgba(255,255,255,0.04)" }}
-								>
+				{/* Main content area (z-10) */}
+				<PanelGroup direction="vertical" className="flex-1 min-h-0 relative z-10">
+					{/* Top panel: video preview + settings */}
+					<Panel defaultSize={85} minSize={40}>
+						<PanelGroup direction="horizontal" className="h-full">
+							{/* Video preview panel */}
+							<Panel defaultSize={70} minSize={30}>
+								<div className="w-full h-full flex flex-col items-center justify-center relative p-4">
 									{/* Video preview */}
 									<div
 										className="w-full flex justify-center items-center relative z-10"
 										style={STYLE_PREVIEW_CONTAINER}
 									>
 										<div
-											className="relative"
+											className="relative rounded-2xl"
 											style={{
 												width: "auto",
 												height: "100%",
@@ -2326,6 +2313,8 @@ export default function VideoEditor() {
 												maxWidth: "100%",
 												margin: "0 auto",
 												boxSizing: "border-box",
+												border: "1px solid rgba(255,255,255,0.04)",
+												boxShadow: "0 25px 80px rgba(0,0,0,0.7), 0 8px 20px rgba(0,0,0,0.4)",
 											}}
 										>
 											<VideoPlayback
@@ -2397,155 +2386,176 @@ export default function VideoEditor() {
 								</div>
 							</Panel>
 
-							<PanelResizeHandle className="h-4 bg-transparent transition-colors rounded-full mx-auto flex items-center justify-center cursor-row-resize group">
-								<div className="w-8 h-[3px] rounded-full bg-white/10 group-hover:bg-white/20 transition-all duration-200" />
+							{/* Panel resize handle (vertical divider) */}
+							<PanelResizeHandle className="w-2 flex items-center justify-center cursor-col-resize group">
+								<div className="w-[3px] h-8 rounded-full bg-white/[0.06] group-hover:bg-white/[0.15] transition-all duration-200" />
 							</PanelResizeHandle>
 
-							{/* Timeline section */}
-							<Panel defaultSize={30} minSize={20}>
-								<div className="h-full min-h-0 backdrop-blur-xl rounded-2xl overflow-hidden flex flex-col relative transition-all" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
-									<TimelineEditor
-										videoDuration={duration}
-										currentTime={currentTime}
-										onSeek={handleSeek}
-										cursorTelemetry={effectiveCursorTelemetry}
-										zoomRegions={effectiveZoomRegions}
-										onZoomAdded={handleZoomAdded}
-										onZoomSuggested={handleZoomSuggested}
-										onZoomSpanChange={handleZoomSpanChange}
-										onZoomDelete={handleZoomDelete}
+							{/* Settings panel (glassmorphic) */}
+							<Panel defaultSize={30} minSize={15}>
+								<div
+									className="h-full rounded-2xl overflow-hidden my-2 mr-2"
+									style={{
+										background: "rgba(17,17,19,0.85)",
+										backdropFilter: "blur(40px)",
+										WebkitBackdropFilter: "blur(40px)",
+										border: "1px solid rgba(255,255,255,0.06)",
+										boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+									}}
+								>
+									<SettingsPanel
+										selected={wallpaper}
+										onWallpaperChange={setWallpaper}
+										selectedZoomDepth={selectedZoomDepth}
+										onZoomDepthChange={handleZoomDepthChange}
 										selectedZoomId={selectedZoomId}
-										onSelectZoom={handleSelectZoom}
-										trimRegions={trimRegions}
-										onTrimAdded={handleTrimAdded}
-										onTrimSpanChange={handleTrimSpanChange}
-										onTrimDelete={handleTrimDelete}
+										onZoomDelete={handleZoomDelete}
 										selectedTrimId={selectedTrimId}
-										onSelectTrim={handleSelectTrim}
-										speedRegions={speedRegions}
-										onSpeedAdded={handleSpeedAdded}
-										onSpeedSpanChange={handleSpeedSpanChange}
-										onSpeedDelete={handleSpeedDelete}
-										selectedSpeedId={selectedSpeedId}
-										onSelectSpeed={handleSelectSpeed}
-										audioRegions={audioRegions}
-										onAudioAdded={handleAudioAdded}
-										onAudioSpanChange={handleAudioSpanChange}
-										onAudioDelete={handleAudioDelete}
-										selectedAudioId={selectedAudioId}
-										onSelectAudio={handleSelectAudio}
-										annotationRegions={annotationRegions}
-										onAnnotationAdded={handleAnnotationAdded}
-										onAnnotationSpanChange={handleAnnotationSpanChange}
-										onAnnotationDelete={handleAnnotationDelete}
-										selectedAnnotationId={selectedAnnotationId}
-										onSelectAnnotation={handleSelectAnnotation}
+										onTrimDelete={handleTrimDelete}
+										shadowIntensity={shadowIntensity}
+										onShadowChange={setShadowIntensity}
+										backgroundBlur={backgroundBlur}
+										onBackgroundBlurChange={setBackgroundBlur}
+										zoomMotionBlur={zoomMotionBlur}
+										onZoomMotionBlurChange={setZoomMotionBlur}
+										connectZooms={connectZooms}
+										onConnectZoomsChange={setConnectZooms}
+										showCursor={showCursor}
+										onShowCursorChange={setShowCursor}
+										loopCursor={loopCursor}
+										onLoopCursorChange={setLoopCursor}
+										cursorSize={cursorSize}
+										onCursorSizeChange={setCursorSize}
+										cursorSmoothing={cursorSmoothing}
+										onCursorSmoothingChange={setCursorSmoothing}
+										cursorMotionBlur={cursorMotionBlur}
+										onCursorMotionBlurChange={setCursorMotionBlur}
+										cursorClickBounce={cursorClickBounce}
+										onCursorClickBounceChange={setCursorClickBounce}
+										cursorSway={cursorSway}
+										onCursorSwayChange={setCursorSway}
+										borderRadius={borderRadius}
+										onBorderRadiusChange={setBorderRadius}
+										padding={padding}
+										onPaddingChange={setPadding}
+										cropRegion={cropRegion}
+										onCropChange={setCropRegion}
 										aspectRatio={aspectRatio}
 										onAspectRatioChange={setAspectRatio}
+										videoElement={videoPlaybackRef.current?.video || null}
+										exportQuality={exportQuality}
+										onExportQualityChange={setExportQuality}
+										exportFormat={exportFormat}
+										onExportFormatChange={setExportFormat}
+										gifFrameRate={gifFrameRate}
+										onGifFrameRateChange={setGifFrameRate}
+										gifLoop={gifLoop}
+										onGifLoopChange={setGifLoop}
+										gifSizePreset={gifSizePreset}
+										onGifSizePresetChange={setGifSizePreset}
+										gifOutputDimensions={gifOutputDims}
+										onExport={handleOpenExportDialog}
+										selectedAnnotationId={selectedAnnotationId}
+										annotationRegions={annotationRegions}
+										onAnnotationContentChange={handleAnnotationContentChange}
+										onAnnotationTypeChange={handleAnnotationTypeChange}
+										onAnnotationStyleChange={handleAnnotationStyleChange}
+										onAnnotationFigureDataChange={handleAnnotationFigureDataChange}
+										onAnnotationDelete={handleAnnotationDelete}
+										onSaveProject={handleSaveProject}
+										onLoadProject={handleLoadProject}
+										selectedSpeedId={selectedSpeedId}
+										selectedSpeedValue={selectedSpeedValue}
+										onSpeedChange={handleSpeedChange}
+										onSpeedDelete={handleSpeedDelete}
+										webcamPath={webcamPath}
+										webcamVisible={webcamVisible}
+										onWebcamVisibleChange={setWebcamVisible}
+										webcamShape={webcamShape}
+										onWebcamShapeChange={setWebcamShape}
+										webcamSize={webcamSize}
+										onWebcamSizeChange={setWebcamSize}
+										webcamOpacity={webcamOpacity}
+										onWebcamOpacityChange={setWebcamOpacity}
+										webcamBorderColor={webcamBorderColor}
+										onWebcamBorderColorChange={setWebcamBorderColor}
+										webcamBorderWidth={webcamBorderWidth}
+										onWebcamBorderWidthChange={setWebcamBorderWidth}
+										webcamShadow={webcamShadow}
+										onWebcamShadowChange={setWebcamShadow}
+										webcamBgMode={webcamBgMode}
+										onWebcamBgModeChange={setWebcamBgMode}
+										webcamBgBlur={webcamBgBlur}
+										onWebcamBgBlurChange={setWebcamBgBlur}
+										webcamBgColor={webcamBgColor}
+										onWebcamBgColorChange={setWebcamBgColor}
+										isExporting={isExporting}
+										videoUrl={videoPath}
+										audioEnhanced={audioEnhanced}
+										enhancedAudioUrl={enhancedAudioUrl}
+										onEnhanceAudio={handleEnhanceAudio}
+										onUndoEnhanceAudio={handleUndoEnhanceAudio}
 									/>
 								</div>
 							</Panel>
 						</PanelGroup>
-					</div>
+					</Panel>
 
-					{/* Right section: settings panel */}
-					<SettingsPanel
-						selected={wallpaper}
-						onWallpaperChange={setWallpaper}
-						selectedZoomDepth={selectedZoomDepth}
-						onZoomDepthChange={handleZoomDepthChange}
-						selectedZoomId={selectedZoomId}
-						onZoomDelete={handleZoomDelete}
-						selectedTrimId={selectedTrimId}
-						onTrimDelete={handleTrimDelete}
-						shadowIntensity={shadowIntensity}
-						onShadowChange={setShadowIntensity}
-						backgroundBlur={backgroundBlur}
-						onBackgroundBlurChange={setBackgroundBlur}
-						zoomMotionBlur={zoomMotionBlur}
-						onZoomMotionBlurChange={setZoomMotionBlur}
-						connectZooms={connectZooms}
-						onConnectZoomsChange={setConnectZooms}
-						showCursor={showCursor}
-						onShowCursorChange={setShowCursor}
-						loopCursor={loopCursor}
-						onLoopCursorChange={setLoopCursor}
-						cursorSize={cursorSize}
-						onCursorSizeChange={setCursorSize}
-						cursorSmoothing={cursorSmoothing}
-						onCursorSmoothingChange={setCursorSmoothing}
-						cursorMotionBlur={cursorMotionBlur}
-						onCursorMotionBlurChange={setCursorMotionBlur}
-						cursorClickBounce={cursorClickBounce}
-						onCursorClickBounceChange={setCursorClickBounce}
-						cursorSway={cursorSway}
-						onCursorSwayChange={setCursorSway}
-						borderRadius={borderRadius}
-						onBorderRadiusChange={setBorderRadius}
-						padding={padding}
-						onPaddingChange={setPadding}
-						cropRegion={cropRegion}
-						onCropChange={setCropRegion}
-						aspectRatio={aspectRatio}
-						onAspectRatioChange={setAspectRatio}
-						videoElement={videoPlaybackRef.current?.video || null}
-						exportQuality={exportQuality}
-						onExportQualityChange={setExportQuality}
-						exportFormat={exportFormat}
-						onExportFormatChange={setExportFormat}
-						gifFrameRate={gifFrameRate}
-						onGifFrameRateChange={setGifFrameRate}
-						gifLoop={gifLoop}
-						onGifLoopChange={setGifLoop}
-						gifSizePreset={gifSizePreset}
-						onGifSizePresetChange={setGifSizePreset}
-						gifOutputDimensions={gifOutputDims}
-						onExport={handleOpenExportDialog}
-						selectedAnnotationId={selectedAnnotationId}
-						annotationRegions={annotationRegions}
-						onAnnotationContentChange={handleAnnotationContentChange}
-						onAnnotationTypeChange={handleAnnotationTypeChange}
-						onAnnotationStyleChange={handleAnnotationStyleChange}
-						onAnnotationFigureDataChange={handleAnnotationFigureDataChange}
-						onAnnotationDelete={handleAnnotationDelete}
-						onSaveProject={handleSaveProject}
-						onLoadProject={handleLoadProject}
-						selectedSpeedId={selectedSpeedId}
-						selectedSpeedValue={selectedSpeedValue}
-						onSpeedChange={handleSpeedChange}
-						onSpeedDelete={handleSpeedDelete}
-						webcamPath={webcamPath}
-						webcamVisible={webcamVisible}
-						onWebcamVisibleChange={setWebcamVisible}
-						webcamShape={webcamShape}
-						onWebcamShapeChange={setWebcamShape}
-						webcamSize={webcamSize}
-						onWebcamSizeChange={setWebcamSize}
-						webcamOpacity={webcamOpacity}
-						onWebcamOpacityChange={setWebcamOpacity}
-						webcamBorderColor={webcamBorderColor}
-						onWebcamBorderColorChange={setWebcamBorderColor}
-						webcamBorderWidth={webcamBorderWidth}
-						onWebcamBorderWidthChange={setWebcamBorderWidth}
-						webcamShadow={webcamShadow}
-						onWebcamShadowChange={setWebcamShadow}
-						webcamBgMode={webcamBgMode}
-						onWebcamBgModeChange={setWebcamBgMode}
-						webcamBgBlur={webcamBgBlur}
-						onWebcamBgBlurChange={setWebcamBgBlur}
-						webcamBgColor={webcamBgColor}
-						onWebcamBgColorChange={setWebcamBgColor}
-						isExporting={isExporting}
-						videoUrl={videoPath}
-						audioEnhanced={audioEnhanced}
-						enhancedAudioUrl={enhancedAudioUrl}
-						onEnhanceAudio={handleEnhanceAudio}
-						onUndoEnhanceAudio={handleUndoEnhanceAudio}
-					/>
-				</div>
+					{/* Horizontal resize handle */}
+					<PanelResizeHandle className="h-2 flex items-center justify-center cursor-row-resize group">
+						<div className="w-8 h-[3px] rounded-full bg-white/[0.06] group-hover:bg-white/[0.15] transition-all duration-200" />
+					</PanelResizeHandle>
 
-				<Toaster theme="dark" className="pointer-events-auto" />
+					{/* Timeline panel (docked bottom) */}
+					<Panel defaultSize={15} minSize={15}>
+						<div
+							className="h-full min-h-0 mx-3 mb-2 rounded-2xl overflow-hidden flex flex-col relative transition-all"
+							style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", boxShadow: "0 -4px 20px rgba(0,0,0,0.3)" }}
+						>
+							<TimelineEditor
+								videoDuration={duration}
+								currentTime={currentTime}
+								onSeek={handleSeek}
+								cursorTelemetry={effectiveCursorTelemetry}
+								zoomRegions={effectiveZoomRegions}
+								onZoomAdded={handleZoomAdded}
+								onZoomSuggested={handleZoomSuggested}
+								onZoomSpanChange={handleZoomSpanChange}
+								onZoomDelete={handleZoomDelete}
+								selectedZoomId={selectedZoomId}
+								onSelectZoom={handleSelectZoom}
+								trimRegions={trimRegions}
+								onTrimAdded={handleTrimAdded}
+								onTrimSpanChange={handleTrimSpanChange}
+								onTrimDelete={handleTrimDelete}
+								selectedTrimId={selectedTrimId}
+								onSelectTrim={handleSelectTrim}
+								speedRegions={speedRegions}
+								onSpeedAdded={handleSpeedAdded}
+								onSpeedSpanChange={handleSpeedSpanChange}
+								onSpeedDelete={handleSpeedDelete}
+								selectedSpeedId={selectedSpeedId}
+								onSelectSpeed={handleSelectSpeed}
+								audioRegions={audioRegions}
+								onAudioAdded={handleAudioAdded}
+								onAudioSpanChange={handleAudioSpanChange}
+								onAudioDelete={handleAudioDelete}
+								selectedAudioId={selectedAudioId}
+								onSelectAudio={handleSelectAudio}
+								annotationRegions={annotationRegions}
+								onAnnotationAdded={handleAnnotationAdded}
+								onAnnotationSpanChange={handleAnnotationSpanChange}
+								onAnnotationDelete={handleAnnotationDelete}
+								selectedAnnotationId={selectedAnnotationId}
+								onSelectAnnotation={handleSelectAnnotation}
+								aspectRatio={aspectRatio}
+								onAspectRatioChange={setAspectRatio}
+							/>
+						</div>
+					</Panel>
+				</PanelGroup>
 
+				{/* Overlays */}
 				<ExportDialog
 					isOpen={showExportDialog}
 					onClose={handleExportDialogClose}
@@ -2612,6 +2622,8 @@ export default function VideoEditor() {
 					onLoadProject={() => void handleLoadProject()}
 					onOpenRecordingsFolder={() => void openRecordingsFolder()}
 				/>
+
+				<Toaster theme="dark" className="pointer-events-auto" />
 			</div>
 		</TooltipProvider>
 	);

@@ -69,16 +69,6 @@ export default function Item({
 					? glassStyles.glassPurple
 					: glassStyles.glassYellow;
 
-	const endCapColor = isZoom
-		? "#2563EB"
-		: isTrim
-			? "#ef4444"
-			: isSpeed
-				? "#d97706"
-				: isAudio
-					? "#a855f7"
-					: "#B4A046";
-
 	const timeLabel = useMemo(
 		() => `${formatMs(span.start)} – ${formatMs(span.end)}`,
 		[span.start, span.end],
@@ -103,7 +93,7 @@ export default function Item({
 						"w-full h-full overflow-hidden flex items-center justify-center gap-1.5 cursor-grab active:cursor-grabbing relative",
 						isSelected && glassStyles.selected,
 					)}
-					style={{ height: 40, color: "#fff", minWidth: 24 }}
+					style={{ height: 28, color: "#fff", minWidth: 24 }}
 					onClick={(event) => {
 						event.stopPropagation();
 						onSelect?.();
@@ -114,9 +104,7 @@ export default function Item({
 						style={{
 							cursor: "col-resize",
 							pointerEvents: "auto",
-							width: 8,
-							opacity: 0.9,
-							background: endCapColor,
+							width: 4,
 						}}
 						title="Resize left"
 					/>
@@ -125,54 +113,52 @@ export default function Item({
 						style={{
 							cursor: "col-resize",
 							pointerEvents: "auto",
-							width: 8,
-							opacity: 0.9,
-							background: endCapColor,
+							width: 4,
 						}}
 						title="Resize right"
 					/>
 					{/* Content */}
-					<div className="relative z-10 flex flex-col items-center justify-center text-white/90 opacity-80 group-hover:opacity-100 transition-opacity select-none overflow-hidden">
-						<div className="flex items-center gap-1.5">
+					<div className="relative z-10 flex flex-col items-center justify-center opacity-80 group-hover:opacity-100 transition-opacity select-none overflow-hidden">
+						<div className="flex items-center gap-1">
 							{isZoom ? (
 								<>
-									<ZoomIn className="w-3.5 h-3.5 shrink-0" />
-									<span className="text-[11px] font-semibold tracking-tight whitespace-nowrap">
+									<ZoomIn className="w-3 h-3 shrink-0 text-blue-500/50" />
+									<span className="text-[8px] font-mono tracking-tight whitespace-nowrap text-blue-500/50">
 										{ZOOM_LABELS[zoomDepth] || `${zoomDepth}×`}
 									</span>
 								</>
 							) : isTrim ? (
 								<>
-									<Scissors className="w-3.5 h-3.5 shrink-0" />
-									<span className="text-[11px] font-semibold tracking-tight whitespace-nowrap">
+									<Scissors className="w-3 h-3 shrink-0 text-red-500/50" />
+									<span className="text-[8px] font-mono tracking-tight whitespace-nowrap text-red-500/50">
 										Trim
 									</span>
 								</>
 							) : isSpeed ? (
 								<>
-									<Gauge className="w-3.5 h-3.5 shrink-0" />
-									<span className="text-[11px] font-semibold tracking-tight whitespace-nowrap">
+									<Gauge className="w-3 h-3 shrink-0 text-orange-500/50" />
+									<span className="text-[8px] font-mono tracking-tight whitespace-nowrap text-orange-500/50">
 										{speedValue !== undefined ? `${speedValue}×` : "Speed"}
 									</span>
 								</>
 							) : isAudio ? (
 								<>
-									<Music className="w-3.5 h-3.5 shrink-0" />
-									<span className="text-[11px] font-semibold tracking-tight truncate max-w-full">
+									<Music className="w-3 h-3 shrink-0 text-purple-500/50" />
+									<span className="text-[8px] font-mono tracking-tight truncate max-w-full text-purple-500/50">
 										{children}
 									</span>
 								</>
 							) : (
 								<>
-									<MessageSquare className="w-3.5 h-3.5 shrink-0" />
-									<span className="text-[11px] font-semibold tracking-tight whitespace-nowrap">
+									<MessageSquare className="w-3 h-3 shrink-0 text-yellow-500/50" />
+									<span className="text-[8px] font-mono tracking-tight whitespace-nowrap text-yellow-500/50">
 										{children}
 									</span>
 								</>
 							)}
 						</div>
 						<span
-							className={`text-[9px] tabular-nums tracking-tight whitespace-nowrap transition-opacity ${
+							className={`text-[7px] font-mono tabular-nums tracking-tight whitespace-nowrap transition-opacity text-white/30 ${
 								isSelected ? "opacity-60" : "opacity-0 group-hover:opacity-40"
 							}`}
 						>
