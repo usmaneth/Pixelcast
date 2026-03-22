@@ -142,6 +142,27 @@ export function HomeScreen() {
 				WebkitAppRegion: "drag",
 			} as React.CSSProperties}
 		>
+			{/* ============ VEO VIDEO BACKGROUND ============ */}
+			<div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+				{/* 
+					Drop your Veo-generated video into public/veo-bg.mp4! 
+					We're using a heavy blur and mix-blend-screen to make it feel like an ambient light source.
+				*/}
+				<video
+					autoPlay
+					loop
+					muted
+					playsInline
+					className="absolute inset-0 w-[120%] h-[120%] -left-[10%] -top-[10%] object-cover opacity-[0.3] mix-blend-screen transition-opacity duration-1000"
+					style={{ filter: "blur(60px)" }}
+					src="https://videos.pexels.com/video-files/3129576/3129576-hd_1920_1080_30fps.mp4" 
+					// Placeholder. Replace with your Veo generation! -> src="/veo-bg.mp4"
+				/>
+				
+				{/* A deep radial gradient to ensure the center content remains highly legible */}
+				<div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(10,10,10,0.5)_0%,rgba(10,10,10,0.98)_100%)] pointer-events-none" />
+			</div>
+
 			{/* ============ BACKGROUND ORBS ============ */}
 			{/* Red ambient orb -- top center with drift */}
 			<div
