@@ -1,4 +1,4 @@
-import { CircleDot, FileVideo, Film, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 /* ------------------------------------------------------------------ */
@@ -10,7 +10,7 @@ const KEYFRAMES = `
 	50%      { transform: scale(1.02); }
 }
 @keyframes hs-fadeSlideUp {
-	from { opacity: 0; transform: translateY(12px); }
+	from { opacity: 0; transform: translateY(10px); }
 	to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes hs-fadeIn {
@@ -25,6 +25,10 @@ const KEYFRAMES = `
 	0%   { opacity: 0; clip-path: inset(0 100% 0 0); }
 	30%  { opacity: 1; clip-path: inset(0 100% 0 0); }
 	100% { opacity: 1; clip-path: inset(0 0% 0 0); }
+}
+@keyframes hs-drift {
+	0%, 100% { transform: translateX(-20px); }
+	50%      { transform: translateX(20px); }
 }
 `;
 
@@ -55,8 +59,6 @@ function relativeTime(timestampMs: number): string {
 	return `${months}mo ago`;
 }
 
-const NOISE_SVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E")`;
-
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
 /* ------------------------------------------------------------------ */
@@ -79,6 +81,22 @@ export function HomeScreen() {
 			}
 		}
 		fetchProjects();
+	}, []);
+
+	/* ---- keyboard shortcuts ---- */
+	useEffect(() => {
+		function handleKeyDown(e: KeyboardEvent) {
+			if (e.metaKey && e.key === "n") {
+				e.preventDefault();
+				handleRecordClick();
+			}
+			if (e.metaKey && e.key === "o") {
+				e.preventDefault();
+				handleEditClick();
+			}
+		}
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, []);
 
 	/* ---- handlers ---- */
@@ -113,412 +131,353 @@ export function HomeScreen() {
 
 	return (
 		<div
-			className="relative flex flex-col h-screen w-full overflow-hidden font-sans selection:bg-[#E0000F]/30"
+			className="relative flex flex-col items-center justify-center h-screen w-full overflow-hidden font-sans selection:bg-[#E0000F]/30"
 			style={{
-				background: "#0A0A0A",
+				background: "#0a0a0a",
 				WebkitAppRegion: "drag",
 			} as React.CSSProperties}
 		>
-			{/* ============ BACKGROUND LAYER ============ */}
-			{/* Red gradient orb -- top right */}
+			{/* ============ BACKGROUND ORBS ============ */}
+			{/* Red ambient orb -- top center with drift */}
 			<div
 				className="pointer-events-none absolute"
 				style={{
 					top: "-100px",
-					right: "-100px",
-					width: 600,
-					height: 600,
+					left: "50%",
+					marginLeft: -200,
+					width: 400,
+					height: 400,
 					borderRadius: "50%",
-					background: "rgba(224,0,15,0.04)",
-					filter: "blur(200px)",
+					background: "rgba(224,0,15,0.035)",
+					filter: "blur(100px)",
+					animation: "hs-drift 20s ease-in-out infinite",
 				}}
 			/>
-			{/* Blue gradient orb -- bottom left */}
+			{/* Purple ambient orb -- bottom right */}
 			<div
 				className="pointer-events-none absolute"
 				style={{
-					bottom: "-80px",
-					left: "-80px",
-					width: 500,
-					height: 500,
+					bottom: "-60px",
+					right: "-60px",
+					width: 250,
+					height: 250,
 					borderRadius: "50%",
-					background: "rgba(37,99,235,0.04)",
-					filter: "blur(180px)",
-				}}
-			/>
-			{/* Noise texture overlay */}
-			<div
-				className="pointer-events-none absolute inset-0"
-				style={{
-					backgroundImage: NOISE_SVG,
-					backgroundRepeat: "repeat",
-					opacity: 0.02,
-					mixBlendMode: "overlay",
+					background: "rgba(191,90,242,0.02)",
+					filter: "blur(70px)",
 				}}
 			/>
 
-			{/* ============ FROSTED GLASS HEADER (Dynamic Island) ============ */}
+			{/* ============ CENTERED CONTENT ============ */}
 			<div
-				className="relative z-10 flex items-center justify-center shrink-0"
+				className="relative z-10 flex flex-col items-center"
 				style={{
-					height: 52,
-					backdropFilter: "blur(40px) saturate(180%)",
-					WebkitBackdropFilter: "blur(40px) saturate(180%)",
-					background: "rgba(10,10,10,0.6)",
-					borderBottom: "1px solid rgba(255,255,255,0.06)",
-					WebkitAppRegion: "drag",
-				} as React.CSSProperties}
-			>
-				<span
-					style={{
-						fontFamily: "'Inter', system-ui, sans-serif",
-						fontSize: 13,
-						fontWeight: 600,
-						letterSpacing: "0.08em",
-						color: "rgba(255,255,255,0.5)",
-						textTransform: "uppercase" as const,
-					}}
-				>
-					klipt
-				</span>
-			</div>
-
-			{/* ============ MAIN CONTENT ============ */}
-			<div
-				className="relative z-10 flex flex-1 flex-col items-center overflow-y-auto"
-				style={{
-					paddingTop: 48,
-					paddingBottom: 48,
-					paddingLeft: 32,
-					paddingRight: 32,
+					width: "100%",
+					maxWidth: 480,
 					WebkitAppRegion: "no-drag",
 				} as React.CSSProperties}
 			>
-				{/* ---- HERO SECTION ---- */}
-				<div className="flex flex-col items-center mb-14">
-					{/* Logo: three rotating rectangles */}
+				{/* ---- LOGO ---- */}
+				<div
+					style={{
+						width: 56,
+						height: 56,
+						position: "relative",
+						animation: "hs-scaleIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) 300ms both",
+					}}
+				>
 					<div
 						style={{
-							width: 72,
-							height: 72,
+							width: "100%",
+							height: "100%",
 							position: "relative",
-							marginBottom: 20,
 							animation: "hs-breathe 4s ease-in-out infinite",
-							animationDelay: "0ms",
-							opacity: 0,
-							animationFillMode: "none",
 						}}
 					>
-						{/* Wrapper for scale-in entrance */}
+						{/* Outer rectangle */}
 						<div
 							style={{
-								width: "100%",
-								height: "100%",
-								position: "relative",
-								animation: "hs-scaleIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) 300ms both",
+								position: "absolute",
+								inset: 0,
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
 							}}
 						>
 							<div
-								className="absolute inset-0 flex items-center justify-center"
-								style={{ animation: "hs-breathe 4s ease-in-out infinite" }}
-							>
-								<div
-									style={{
-										position: "absolute",
-										width: 32,
-										height: 32,
-										border: "3px solid rgba(255,255,255,0.08)",
-										borderRadius: 6,
-										transform: "rotate(12deg)",
-									}}
-								/>
-								<div
-									style={{
-										position: "absolute",
-										width: 32,
-										height: 32,
-										border: "3px solid rgba(255,255,255,0.15)",
-										borderRadius: 6,
-										transform: "rotate(-12deg)",
-									}}
-								/>
-								<div
-									style={{
-										position: "absolute",
-										width: 32,
-										height: 32,
-										borderRadius: 6,
-										transform: "rotate(45deg)",
-										background: "linear-gradient(135deg, #E0000F 0%, #FF4500 100%)",
-										boxShadow: "0 0 40px rgba(224,0,15,0.5), inset 0 2px 4px rgba(255,255,255,0.3)",
-									}}
-								/>
-							</div>
+								style={{
+									width: 28,
+									height: 28,
+									border: "2.5px solid rgba(255,255,255,0.06)",
+									borderRadius: 5,
+									transform: "rotate(5deg)",
+									position: "absolute",
+								}}
+							/>
+							{/* Middle rectangle */}
+							<div
+								style={{
+									width: 28,
+									height: 28,
+									border: "2.5px solid rgba(255,255,255,0.12)",
+									borderRadius: 5,
+									transform: "rotate(-5deg)",
+									position: "absolute",
+								}}
+							/>
+							{/* Inner solid rectangle */}
+							<div
+								style={{
+									width: 28,
+									height: 28,
+									borderRadius: 5,
+									transform: "rotate(20deg)",
+									background: "#E0000F",
+									boxShadow: "0 0 24px rgba(224,0,15,0.25)",
+									position: "absolute",
+								}}
+							/>
 						</div>
 					</div>
-
-					{/* Title */}
-					<h1
-						style={{
-							fontFamily: "'Inter', system-ui, sans-serif",
-							fontSize: 48,
-							fontWeight: 500,
-							letterSpacing: "-0.05em",
-							color: "#FFFFFF",
-							margin: 0,
-							lineHeight: 1,
-							animation: "hs-fadeSlideUp 500ms ease-out 400ms both",
-						}}
-					>
-						klipt
-					</h1>
-
-					{/* Tagline */}
-					<p
-						style={{
-							fontFamily: "'Inter', system-ui, sans-serif",
-							fontSize: 14,
-							color: "#666666",
-							marginTop: 12,
-							fontWeight: 400,
-							letterSpacing: "0.01em",
-							animation: "hs-typewriter 1200ms ease-out 600ms both",
-						}}
-					>
-						edit at the speed of thought.
-					</p>
 				</div>
 
-				{/* ---- ACTION CARDS ---- */}
-				<div className="flex gap-5 w-full max-w-xl mb-12">
-					{/* Record Card */}
-					<div
-						onClick={handleRecordClick}
-						className="group relative flex-1 cursor-pointer"
-						style={{
-							animation: "hs-fadeSlideUp 500ms ease-out 800ms both",
-						}}
-					>
-						{/* Glow element behind card */}
-						<div
-							className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-							style={{
-								background: "rgba(224,0,15,0.15)",
-								filter: "blur(40px)",
-								transform: "translateY(8px) scale(0.95)",
-								zIndex: 0,
-							}}
-						/>
-						<div
-							className="relative z-10 flex flex-col items-start rounded-2xl transition-all duration-300 group-hover:-translate-y-1"
-							style={{
-								height: 200,
-								padding: 28,
-								background: "rgba(255,255,255,0.03)",
-								backdropFilter: "blur(40px)",
-								WebkitBackdropFilter: "blur(40px)",
-								border: "1px solid rgba(255,255,255,0.06)",
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-							}}
-						>
-							<div
-								className="flex items-center justify-center rounded-full mb-5 transition-transform duration-300 group-hover:scale-110"
-								style={{
-									width: 48,
-									height: 48,
-									background: "rgba(224,0,15,0.08)",
-								}}
-							>
-								<CircleDot style={{ width: 24, height: 24, color: "#E0000F" }} />
-							</div>
-							<h2
-								style={{
-									fontFamily: "'Inter', system-ui, sans-serif",
-									fontSize: 18,
-									fontWeight: 600,
-									color: "#FFFFFF",
-									margin: 0,
-									marginBottom: 8,
-								}}
-							>
-								New Recording
-							</h2>
-							<p
-								style={{
-									fontFamily: "'Inter', system-ui, sans-serif",
-									fontSize: 13,
-									color: "#666",
-									margin: 0,
-									lineHeight: 1.5,
-								}}
-							>
-								Capture your screen with AI-powered editing
-							</p>
-						</div>
-					</div>
+				{/* ---- WORDMARK ---- */}
+				<h1
+					style={{
+						fontFamily: "'Inter', system-ui, sans-serif",
+						fontSize: 36,
+						fontWeight: 500,
+						letterSpacing: "-0.05em",
+						color: "#FFFFFF",
+						margin: 0,
+						marginTop: 16,
+						lineHeight: 1,
+						animation: "hs-fadeSlideUp 500ms ease-out 400ms both",
+					}}
+				>
+					klipt
+				</h1>
 
-					{/* Edit Card */}
-					<div
-						onClick={handleEditClick}
-						className="group relative flex-1 cursor-pointer"
+				{/* ---- TAGLINE ---- */}
+				<p
+					style={{
+						fontFamily: "'Inter', system-ui, sans-serif",
+						fontSize: 10,
+						textTransform: "uppercase",
+						letterSpacing: "0.08em",
+						color: "rgba(255,255,255,0.15)",
+						marginTop: 8,
+						fontWeight: 400,
+						animation: "hs-typewriter 1200ms ease-out 600ms both",
+					}}
+				>
+					EDIT AT THE SPEED OF THOUGHT
+				</p>
+
+				{/* ---- ACTION BUTTONS ---- */}
+				<div
+					className="flex gap-2"
+					style={{ marginTop: 28 }}
+				>
+					{/* Start Recording */}
+					<button
+						onClick={handleRecordClick}
+						className="cursor-pointer"
 						style={{
-							animation: "hs-fadeSlideUp 500ms ease-out 900ms both",
-						}}
+							background: "#FFFFFF",
+							color: "#000000",
+							fontFamily: "'Inter', system-ui, sans-serif",
+							fontWeight: 600,
+							fontSize: 13,
+							paddingLeft: 28,
+							paddingRight: 28,
+							paddingTop: 10,
+							paddingBottom: 10,
+							borderRadius: 12,
+							border: "none",
+							boxShadow: "0 4px 20px rgba(255,255,255,0.08)",
+							animation: "hs-fadeSlideUp 500ms ease-out 800ms both",
+							WebkitAppRegion: "no-drag",
+						} as React.CSSProperties}
 					>
-						{/* Glow element behind card */}
-						<div
-							className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+						Start Recording
+					</button>
+					{/* Open File */}
+					<button
+						onClick={handleEditClick}
+						className="cursor-pointer"
+						style={{
+							background: "transparent",
+							color: "rgba(255,255,255,0.35)",
+							fontFamily: "'Inter', system-ui, sans-serif",
+							fontWeight: 600,
+							fontSize: 13,
+							paddingLeft: 28,
+							paddingRight: 28,
+							paddingTop: 10,
+							paddingBottom: 10,
+							borderRadius: 12,
+							border: "1px solid rgba(255,255,255,0.06)",
+							animation: "hs-fadeSlideUp 500ms ease-out 900ms both",
+							WebkitAppRegion: "no-drag",
+						} as React.CSSProperties}
+					>
+						Open File
+					</button>
+				</div>
+
+				{/* ---- KEYBOARD HINTS ---- */}
+				<div
+					className="flex items-center gap-3"
+					style={{
+						marginTop: 10,
+						animation: "hs-fadeIn 500ms ease-out 1000ms both",
+					}}
+				>
+					<span className="flex items-center gap-1">
+						<kbd
 							style={{
-								background: "rgba(37,99,235,0.15)",
-								filter: "blur(40px)",
-								transform: "translateY(8px) scale(0.95)",
-								zIndex: 0,
-							}}
-						/>
-						<div
-							className="relative z-10 flex flex-col items-start rounded-2xl transition-all duration-300 group-hover:-translate-y-1"
-							style={{
-								height: 200,
-								padding: 28,
 								background: "rgba(255,255,255,0.03)",
-								backdropFilter: "blur(40px)",
-								WebkitBackdropFilter: "blur(40px)",
 								border: "1px solid rgba(255,255,255,0.06)",
-							}}
-							onMouseEnter={(e) => {
-								e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
-							}}
-							onMouseLeave={(e) => {
-								e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+								borderRadius: 3,
+								paddingLeft: 5,
+								paddingRight: 5,
+								paddingTop: 1,
+								paddingBottom: 1,
+								fontFamily: "'SF Mono', 'Fira Code', monospace",
+								fontSize: 8,
+								color: "rgba(255,255,255,0.15)",
 							}}
 						>
-							<div
-								className="flex items-center justify-center rounded-full mb-5 transition-transform duration-300 group-hover:scale-110"
-								style={{
-									width: 48,
-									height: 48,
-									background: "rgba(37,99,235,0.08)",
-								}}
-							>
-								<Film style={{ width: 24, height: 24, color: "#2563EB" }} />
-							</div>
-							<h2
-								style={{
-									fontFamily: "'Inter', system-ui, sans-serif",
-									fontSize: 18,
-									fontWeight: 600,
-									color: "#FFFFFF",
-									margin: 0,
-									marginBottom: 8,
-								}}
-							>
-								Edit Video
-							</h2>
-							<p
-								style={{
-									fontFamily: "'Inter', system-ui, sans-serif",
-									fontSize: 13,
-									color: "#666",
-									margin: 0,
-									lineHeight: 1.5,
-								}}
-							>
-								Open and edit an existing recording
-							</p>
-						</div>
-					</div>
+							⌘N
+						</kbd>
+						<span
+							style={{
+								fontSize: 8,
+								color: "rgba(255,255,255,0.10)",
+							}}
+						>
+							record
+						</span>
+					</span>
+					<span className="flex items-center gap-1">
+						<kbd
+							style={{
+								background: "rgba(255,255,255,0.03)",
+								border: "1px solid rgba(255,255,255,0.06)",
+								borderRadius: 3,
+								paddingLeft: 5,
+								paddingRight: 5,
+								paddingTop: 1,
+								paddingBottom: 1,
+								fontFamily: "'SF Mono', 'Fira Code', monospace",
+								fontSize: 8,
+								color: "rgba(255,255,255,0.15)",
+							}}
+						>
+							⌘O
+						</kbd>
+						<span
+							style={{
+								fontSize: 8,
+								color: "rgba(255,255,255,0.10)",
+							}}
+						>
+							open
+						</span>
+					</span>
 				</div>
 
 				{/* ---- RECENT PROJECTS ---- */}
 				{recentProjects.length > 0 && (
 					<div
-						className="w-full max-w-xl flex flex-col"
-						style={{
-							animation: "hs-fadeIn 500ms ease-out 1000ms both",
-						}}
+						className="w-full flex flex-col"
+						style={{ marginTop: 36 }}
 					>
 						<h3
 							style={{
 								fontFamily: "'Inter', system-ui, sans-serif",
-								fontSize: 11,
-								fontWeight: 600,
+								fontSize: 8,
+								fontWeight: 700,
 								textTransform: "uppercase",
 								letterSpacing: "0.12em",
-								color: "#444",
-								marginBottom: 12,
+								color: "rgba(255,255,255,0.10)",
+								marginBottom: 6,
+								marginTop: 0,
 							}}
 						>
-							Recent Projects
+							RECENT
 						</h3>
-						<div className="flex flex-col gap-1">
+						<div className="flex flex-col">
 							{recentProjects.map((project, i) => (
 								<div
 									key={project.path}
 									onClick={() => handleProjectClick(project.path)}
-									className="group flex items-center justify-between rounded-xl cursor-pointer transition-all duration-200 hover:translate-x-1"
+									className="group flex items-center justify-between cursor-pointer transition-colors duration-200"
 									style={{
-										padding: "10px 12px",
-										background: "transparent",
-										border: "1px solid transparent",
-										animation: `hs-fadeSlideUp 400ms ease-out ${1000 + i * 80}ms both`,
+										padding: "7px 10px",
+										borderRadius: 8,
+										animation: `hs-fadeIn 400ms ease-out ${1000 + i * 80}ms both`,
 									}}
 									onMouseEnter={(e) => {
-										e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-										e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+										e.currentTarget.style.background = "rgba(255,255,255,0.02)";
 									}}
 									onMouseLeave={(e) => {
 										e.currentTarget.style.background = "transparent";
-										e.currentTarget.style.borderColor = "transparent";
 									}}
 								>
-									<div className="flex items-center gap-3">
+									<div className="flex items-center gap-2">
+										{/* Dot */}
 										<div
-											className="flex items-center justify-center rounded-lg transition-colors duration-200"
 											style={{
-												width: 36,
-												height: 36,
-												background: "rgba(255,255,255,0.04)",
-												border: "1px solid rgba(255,255,255,0.06)",
+												width: 6,
+												height: 6,
+												borderRadius: 1,
+												background: "rgba(255,255,255,0.06)",
+												flexShrink: 0,
+											}}
+										/>
+										<span
+											className="transition-colors duration-200"
+											style={{
+												fontFamily: "'Inter', system-ui, sans-serif",
+												fontSize: 11,
+												fontWeight: 400,
+												color: "rgba(255,255,255,0.35)",
+											}}
+											ref={(el) => {
+												if (!el) return;
+												const parent = el.closest(".group");
+												if (!parent) return;
+												parent.addEventListener("mouseenter", () => {
+													el.style.color = "rgba(255,255,255,0.50)";
+												});
+												parent.addEventListener("mouseleave", () => {
+													el.style.color = "rgba(255,255,255,0.35)";
+												});
 											}}
 										>
-											<FileVideo
-												style={{ width: 16, height: 16, color: "#555" }}
-												className="group-hover:text-white/70 transition-colors duration-200"
-											/>
-										</div>
-										<div className="flex flex-col">
-											<span
-												className="group-hover:text-white transition-colors duration-200"
-												style={{
-													fontFamily: "'Inter', system-ui, sans-serif",
-													fontSize: 13,
-													fontWeight: 500,
-													color: "rgba(255,255,255,0.8)",
-												}}
-											>
-												{project.name.replace(".klipt", "")}
-											</span>
-											<span
-												style={{
-													fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace",
-													fontSize: 11,
-													color: "#444",
-													marginTop: 2,
-												}}
-											>
-												{relativeTime(project.mtime)}
-											</span>
-										</div>
+											{project.name.replace(".klipt", "")}
+										</span>
 									</div>
-									<ChevronRight
-										className="opacity-0 group-hover:opacity-60 transition-all duration-200 translate-x-[-4px] group-hover:translate-x-0"
-										style={{ width: 14, height: 14, color: "#666" }}
-									/>
+									<div className="flex items-center gap-2">
+										<span
+											style={{
+												fontFamily: "'SF Mono', 'Fira Code', monospace",
+												fontSize: 9,
+												color: "rgba(255,255,255,0.10)",
+											}}
+										>
+											{relativeTime(project.mtime)}
+										</span>
+										<ChevronRight
+											className="transition-transform duration-200 group-hover:translate-x-[2px]"
+											style={{
+												width: 10,
+												height: 10,
+												color: "rgba(255,255,255,0.08)",
+											}}
+										/>
+									</div>
 								</div>
 							))}
 						</div>
@@ -528,35 +487,36 @@ export function HomeScreen() {
 
 			{/* ============ FOOTER ============ */}
 			<div
-				className="relative z-10 flex items-center justify-center gap-3 shrink-0 pointer-events-none"
+				className="absolute flex items-center justify-center gap-1.5 pointer-events-none"
 				style={{
-					paddingBottom: 16,
-					paddingTop: 8,
+					bottom: 12,
+					left: 0,
+					right: 0,
 				}}
 			>
 				<span
 					style={{
-						fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace",
-						fontSize: 10,
-						color: "#333",
+						fontFamily: "'SF Mono', 'Fira Code', monospace",
+						fontSize: 9,
+						color: "rgba(255,255,255,0.08)",
 					}}
 				>
 					klipt
 				</span>
 				<span
 					style={{
-						width: 3,
-						height: 3,
+						width: 2,
+						height: 2,
 						borderRadius: "50%",
-						background: "#333",
+						background: "rgba(255,255,255,0.08)",
 						display: "inline-block",
 					}}
 				/>
 				<span
 					style={{
-						fontFamily: "'SF Mono', 'Fira Code', 'Cascadia Code', monospace",
-						fontSize: 10,
-						color: "#333",
+						fontFamily: "'SF Mono', 'Fira Code', monospace",
+						fontSize: 9,
+						color: "rgba(255,255,255,0.08)",
 					}}
 				>
 					v1.0
