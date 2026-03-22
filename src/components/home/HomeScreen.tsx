@@ -352,61 +352,68 @@ export function HomeScreen() {
 					</div>
 				</div>
 
-				{/* ---- KEYBOARD HINTS ---- */}{/* ---- KEYBOARD HINTS ---- */}
+				{/* ---- KEYBOARD HINTS ---- */}
 				<div
-					className="flex items-center gap-3"
+					className="flex items-center gap-6"
 					style={{
-						marginTop: 10,
+						marginTop: 20,
 						animation: "hs-fadeIn 500ms ease-out 1000ms both",
-					}}
+						WebkitAppRegion: "no-drag",
+					} as React.CSSProperties}
 				>
-					<span className="flex items-center gap-1">
+					<span className="flex items-center gap-2">
 						<kbd
 							style={{
-								background: "rgba(255,255,255,0.03)",
-								border: "1px solid rgba(255,255,255,0.06)",
-								borderRadius: 3,
-								paddingLeft: 6,
-								paddingRight: 6,
-								paddingTop: 2,
-								paddingBottom: 2,
+								background: "rgba(255,255,255,0.04)",
+								border: "1px solid rgba(255,255,255,0.1)",
+								borderRadius: 6,
+								paddingLeft: 12,
+								paddingRight: 12,
+								paddingTop: 4,
+								paddingBottom: 4,
 								fontFamily: "'SF Mono', 'Fira Code', monospace",
-								fontSize: 12,
-								color: "rgba(255,255,255,0.5)",
+								fontSize: 16,
+								color: "rgba(255,255,255,0.7)",
+								boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
 							}}
 						>
 							⌘N
 						</kbd>
 						<span
 							style={{
-								fontSize: 12,
-								color: "rgba(255,255,255,0.4)",
+								fontSize: 15,
+								color: "rgba(255,255,255,0.5)",
+								fontWeight: 500,
+								fontFamily: "'Inter', system-ui, sans-serif",
 							}}
 						>
 							record
 						</span>
 					</span>
-					<span className="flex items-center gap-1">
+					<span className="flex items-center gap-2">
 						<kbd
 							style={{
-								background: "rgba(255,255,255,0.03)",
-								border: "1px solid rgba(255,255,255,0.06)",
-								borderRadius: 3,
-								paddingLeft: 6,
-								paddingRight: 6,
-								paddingTop: 2,
-								paddingBottom: 2,
+								background: "rgba(255,255,255,0.04)",
+								border: "1px solid rgba(255,255,255,0.1)",
+								borderRadius: 6,
+								paddingLeft: 12,
+								paddingRight: 12,
+								paddingTop: 4,
+								paddingBottom: 4,
 								fontFamily: "'SF Mono', 'Fira Code', monospace",
-								fontSize: 12,
-								color: "rgba(255,255,255,0.5)",
+								fontSize: 16,
+								color: "rgba(255,255,255,0.7)",
+								boxShadow: "0 2px 10px rgba(0,0,0,0.2)",
 							}}
 						>
 							⌘O
 						</kbd>
 						<span
 							style={{
-								fontSize: 12,
-								color: "rgba(255,255,255,0.4)",
+								fontSize: 15,
+								color: "rgba(255,255,255,0.5)",
+								fontWeight: 500,
+								fontFamily: "'Inter', system-ui, sans-serif",
 							}}
 						>
 							open
