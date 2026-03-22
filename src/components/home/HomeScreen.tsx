@@ -105,6 +105,9 @@ export function HomeScreen() {
 		window.electronAPI?.openHudOverlay().catch((err: unknown) => {
 			console.warn("openHudOverlay IPC interrupted:", err);
 		});
+		// Close this home window as a fallback in case the main process wrapper
+		// doesn't tear it down quickly enough.
+		setTimeout(() => window.close(), 120);
 	};
 
 	const handleEditClick = async () => {
@@ -113,6 +116,7 @@ export function HomeScreen() {
 			if (res && res.success && res.path) {
 				await window.electronAPI?.setCurrentVideoPath(res.path);
 				window.electronAPI?.switchToEditor().catch(() => {});
+				setTimeout(() => window.close(), 120);
 			}
 		} catch (err) {
 			console.error("Failed to open video for editing:", err);
@@ -122,6 +126,7 @@ export function HomeScreen() {
 	const handleProjectClick = async (projectPath: string) => {
 		try {
 			await window.electronAPI?.openSpecificProject(projectPath);
+			setTimeout(() => window.close(), 120);
 		} catch {
 			// Window destroyed on editor open -- expected.
 		}
@@ -179,8 +184,8 @@ export function HomeScreen() {
 				{/* ---- LOGO ---- */}
 				<div
 					style={{
-						width: 56,
-						height: 56,
+						width: 72,
+						height: 72,
 						position: "relative",
 						animation: "hs-scaleIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) 300ms both",
 					}}
@@ -205,10 +210,10 @@ export function HomeScreen() {
 						>
 							<div
 								style={{
-									width: 28,
-									height: 28,
+									width: 36,
+									height: 36,
 									border: "2.5px solid rgba(255,255,255,0.06)",
-									borderRadius: 5,
+									borderRadius: 6,
 									transform: "rotate(5deg)",
 									position: "absolute",
 								}}
@@ -216,10 +221,10 @@ export function HomeScreen() {
 							{/* Middle rectangle */}
 							<div
 								style={{
-									width: 28,
-									height: 28,
+									width: 36,
+									height: 36,
 									border: "2.5px solid rgba(255,255,255,0.12)",
-									borderRadius: 5,
+									borderRadius: 6,
 									transform: "rotate(-5deg)",
 									position: "absolute",
 								}}
@@ -227,12 +232,12 @@ export function HomeScreen() {
 							{/* Inner solid rectangle */}
 							<div
 								style={{
-									width: 28,
-									height: 28,
-									borderRadius: 5,
+									width: 36,
+									height: 36,
+									borderRadius: 6,
 									transform: "rotate(20deg)",
 									background: "#E0000F",
-									boxShadow: "0 0 24px rgba(224,0,15,0.25)",
+									boxShadow: "0 0 32px rgba(224,0,15,0.35)",
 									position: "absolute",
 								}}
 							/>
@@ -244,12 +249,12 @@ export function HomeScreen() {
 				<h1
 					style={{
 						fontFamily: "'Inter', system-ui, sans-serif",
-						fontSize: 36,
+						fontSize: 40,
 						fontWeight: 500,
 						letterSpacing: "-0.05em",
 						color: "#FFFFFF",
 						margin: 0,
-						marginTop: 16,
+						marginTop: 18,
 						lineHeight: 1,
 						animation: "hs-fadeSlideUp 500ms ease-out 400ms both",
 					}}
@@ -261,7 +266,7 @@ export function HomeScreen() {
 				<p
 					style={{
 						fontFamily: "'Inter', system-ui, sans-serif",
-						fontSize: 10,
+						fontSize: 11,
 						textTransform: "uppercase",
 						letterSpacing: "0.08em",
 						color: "rgba(255,255,255,0.15)",
@@ -287,12 +292,12 @@ export function HomeScreen() {
 							color: "#000000",
 							fontFamily: "'Inter', system-ui, sans-serif",
 							fontWeight: 600,
-							fontSize: 13,
-							paddingLeft: 28,
-							paddingRight: 28,
-							paddingTop: 10,
-							paddingBottom: 10,
-							borderRadius: 12,
+							fontSize: 14,
+							paddingLeft: 32,
+							paddingRight: 32,
+							paddingTop: 12,
+							paddingBottom: 12,
+							borderRadius: 14,
 							border: "none",
 							boxShadow: "0 4px 20px rgba(255,255,255,0.08)",
 							animation: "hs-fadeSlideUp 500ms ease-out 800ms both",
@@ -310,12 +315,12 @@ export function HomeScreen() {
 							color: "rgba(255,255,255,0.35)",
 							fontFamily: "'Inter', system-ui, sans-serif",
 							fontWeight: 600,
-							fontSize: 13,
-							paddingLeft: 28,
-							paddingRight: 28,
-							paddingTop: 10,
-							paddingBottom: 10,
-							borderRadius: 12,
+							fontSize: 14,
+							paddingLeft: 32,
+							paddingRight: 32,
+							paddingTop: 12,
+							paddingBottom: 12,
+							borderRadius: 14,
 							border: "1px solid rgba(255,255,255,0.06)",
 							animation: "hs-fadeSlideUp 500ms ease-out 900ms both",
 							WebkitAppRegion: "no-drag",
@@ -339,12 +344,12 @@ export function HomeScreen() {
 								background: "rgba(255,255,255,0.03)",
 								border: "1px solid rgba(255,255,255,0.06)",
 								borderRadius: 3,
-								paddingLeft: 5,
-								paddingRight: 5,
-								paddingTop: 1,
-								paddingBottom: 1,
+								paddingLeft: 6,
+								paddingRight: 6,
+								paddingTop: 2,
+								paddingBottom: 2,
 								fontFamily: "'SF Mono', 'Fira Code', monospace",
-								fontSize: 8,
+								fontSize: 9,
 								color: "rgba(255,255,255,0.15)",
 							}}
 						>
@@ -352,7 +357,7 @@ export function HomeScreen() {
 						</kbd>
 						<span
 							style={{
-								fontSize: 8,
+								fontSize: 9,
 								color: "rgba(255,255,255,0.10)",
 							}}
 						>
@@ -365,12 +370,12 @@ export function HomeScreen() {
 								background: "rgba(255,255,255,0.03)",
 								border: "1px solid rgba(255,255,255,0.06)",
 								borderRadius: 3,
-								paddingLeft: 5,
-								paddingRight: 5,
-								paddingTop: 1,
-								paddingBottom: 1,
+								paddingLeft: 6,
+								paddingRight: 6,
+								paddingTop: 2,
+								paddingBottom: 2,
 								fontFamily: "'SF Mono', 'Fira Code', monospace",
-								fontSize: 8,
+								fontSize: 9,
 								color: "rgba(255,255,255,0.15)",
 							}}
 						>
@@ -378,7 +383,7 @@ export function HomeScreen() {
 						</kbd>
 						<span
 							style={{
-								fontSize: 8,
+								fontSize: 9,
 								color: "rgba(255,255,255,0.10)",
 							}}
 						>
@@ -391,7 +396,7 @@ export function HomeScreen() {
 				{recentProjects.length > 0 && (
 					<div
 						className="w-full flex flex-col"
-						style={{ marginTop: 36 }}
+						style={{ marginTop: 48 }}
 					>
 						<h3
 							style={{

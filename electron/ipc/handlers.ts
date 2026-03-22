@@ -2700,8 +2700,12 @@ export function registerIpcHandlers(
 		try {
 			const recordingsDir = await getRecordingsDir();
 			const files = await fs.readdir(recordingsDir, { withFileTypes: true });
+			const videoExtensions = [".mp4", ".webm"];
 			const projectFiles = files.filter(
-				(f) => f.isFile() && f.name.endsWith(`.${PROJECT_FILE_EXTENSION}`),
+				(f) =>
+					f.isFile() &&
+					(f.name.endsWith(`.${PROJECT_FILE_EXTENSION}`) ||
+						videoExtensions.some((ext) => f.name.endsWith(ext))),
 			);
 
 			const results = await Promise.allSettled(
@@ -2723,7 +2727,7 @@ export function registerIpcHandlers(
 				.map((r) => r.value);
 
 			// sort descending by modified time
-			const sorted = projectsWithStats.sort((a, b) => b.mtime - a.mtime).slice(0, 4);
+			const sorted = projectsWithStats.sort((a, b) => b.mtime - a.mtime).slice(0, 5);
 
 			return { success: true, projects: sorted };
 		} catch (error) {
