@@ -1,5 +1,5 @@
 import { ChevronsLeft, ChevronsRight, Pause, Play } from "lucide-react";
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState, useEffect } from "react";
 import { useScopedT } from "@/contexts/I18nContext";
 
 interface PlaybackControlsProps {
@@ -18,6 +18,24 @@ const PlaybackControls = memo(function PlaybackControls({
 	onSeek,
 }: PlaybackControlsProps) {
 	const t = useScopedT("editor");
+	const [isScrubbing, setIsScrubbing] = useState(false);
+	const [scrubSpeed, setScrubSpeed] = useState(0);
+
+	// Calculate scrub speed for dynamic warp intensity
+	useEffect(() => {
+		if (!isScrubbing) {
+			setScrubSpeed(0);
+			return;
+		}
+		let lastTime = currentTime;
+		const interval = setInterval(() => {
+			const diff = Math.abs(currentTime - lastTime);
+			setScrubSpeed(Math.min(diff * 10, 1)); // Cap at 1
+			lastTime = currentTime;
+		}, 50);
+		return () => clearInterval(interval);
+	}, [currentTime, isScrubbing]);
+
 
 	function formatTime(seconds: number) {
 		if (!isFinite(seconds) || isNaN(seconds) || seconds < 0) return "0:00";
@@ -63,6 +81,11 @@ const PlaybackControls = memo(function PlaybackControls({
 				{/* Interactive Input */}
 				<input
 					type="range"
+					onMouseDown={() => setIsScrubbing(true)}
+					onMouseUp={() => setIsScrubbing(false)}
+					onTouchStart={() => setIsScrubbing(true)}
+					onTouchEnd={() => setIsScrubbing(false)}
+
 					min="0"
 					max={duration || 100}
 					value={currentTime}
@@ -71,12 +94,30 @@ const PlaybackControls = memo(function PlaybackControls({
 					className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
 				/>
 
+				{/* Time-Warp Scrubbing Ripple Effect */}
+				<div
+					className="absolute pointer-events-none transition-all duration-300 z-0 rounded-full"
+					style={{
+						width: 120,
+						height: 120,
+						left: `${progress}%`,
+						top: "50%",
+						transform: `translate(-50%, -50%) scale(${isScrubbing ? 1 + scrubSpeed * 2 : 0})`,
+						opacity: isScrubbing ? 0.8 : 0,
+						background: "rgba(255,255,255,0.02)",
+						backdropFilter: `blur(${10 + scrubSpeed * 30}px) hue-rotate(${scrubSpeed * 90}deg) contrast(${1 + scrubSpeed})`,
+						WebkitBackdropFilter: `blur(${10 + scrubSpeed * 30}px) hue-rotate(${scrubSpeed * 90}deg) contrast(${1 + scrubSpeed})`,
+						boxShadow: isScrubbing ? `0 0 ${30 + scrubSpeed * 50}px rgba(224,0,15,${0.2 + scrubSpeed * 0.5})` : "none",
+					}}
+				/>
+
 				{/* Thumb */}
 				<div
-					className="absolute pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+					className={`absolute pointer-events-none transition-opacity duration-150 ${isScrubbing ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
 					style={{
-						width: 14,
-						height: 14,
+						width: isScrubbing ? 24 : 14,
+						height: isScrubbing ? 24 : 14,
+						transition: "width 0.2s, height 0.2s, opacity 0.15s",
 						borderRadius: "50%",
 						backgroundColor: "#fff",
 						boxShadow: "0 2px 8px rgba(0,0,0,0.5)",
