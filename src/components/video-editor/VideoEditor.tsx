@@ -177,6 +177,97 @@ export default function VideoEditor() {
 	const [audioEnhanced, setAudioEnhanced] = useState(false);
 	const [enhancedAudioUrl, setEnhancedAudioUrl] = useState<string | null>(null);
 	const [isExporting, setIsExporting] = useState(false);
+	const ambilightCanvasRef = useRef<HTMLCanvasElement>(null);
+	const analyserRef = useRef<AnalyserNode | null>(null);
+
+	// Setup AudioContext for Ambilight (Polling until video ref is available)
+	useEffect(() => {
+		let audioCtx: AudioContext;
+		let source: MediaElementAudioSourceNode;
+		let analyser: AnalyserNode;
+		let checkInterval: NodeJS.Timeout;
+
+		const initAudio = (video: HTMLVideoElement) => {
+			if (analyserRef.current) return;
+			try {
+				audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
+				analyser = audioCtx.createAnalyser();
+				analyser.fftSize = 256;
+				
+				if (!(video as any)._audioSourceConnected) {
+					source = audioCtx.createMediaElementSource(video);
+					source.connect(analyser);
+					analyser.connect(audioCtx.destination);
+					(video as any)._audioSourceConnected = true;
+				}
+				analyserRef.current = analyser;
+			} catch (e) {
+				console.warn("AudioContext setup failed:", e);
+			}
+		};
+
+		checkInterval = setInterval(() => {
+			const video = videoPlaybackRef.current?.video;
+			if (video) {
+				clearInterval(checkInterval);
+				video.addEventListener("play", () => initAudio(video), { once: true });
+			}
+		}, 500);
+
+		return () => {
+			clearInterval(checkInterval);
+			if (audioCtx) audioCtx.close().catch(() => {});
+		};
+	}, [videoPath]);
+
+	// Ambilight Update Loop (High Performance DOM mutation)
+	useEffect(() => {
+		let rafId: number;
+		let lastDrawTime = 0;
+		let audioDataArray: Uint8Array;
+		let currentVolume = 0;
+		
+		const updateAmbilight = (timestamp: number) => {
+			const video = videoPlaybackRef.current?.video;
+			const canvas = ambilightCanvasRef.current;
+			
+			if (video && canvas && !video.paused && timestamp - lastDrawTime > 60) {
+				const ctx = canvas.getContext("2d", { alpha: false, willReadFrequently: true });
+				if (ctx && video.videoWidth > 0 && video.videoHeight > 0) {
+					canvas.width = 128;
+					canvas.height = Math.floor(128 * (video.videoHeight / video.videoWidth));
+					ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+					lastDrawTime = timestamp;
+				}
+			}
+
+			if (analyserRef.current && video && !video.paused) {
+				if (!audioDataArray) audioDataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+				analyserRef.current.getByteFrequencyData(audioDataArray as any);
+				let sum = 0;
+				for (let i = 0; i < audioDataArray.length; i++) {
+					sum += audioDataArray[i];
+				}
+				const avg = sum / audioDataArray.length;
+				currentVolume = currentVolume * 0.8 + (avg / 255) * 0.2;
+			} else {
+				currentVolume = currentVolume * 0.9;
+			}
+
+			// Direct DOM mutation for 60fps performance without React renders
+			if (canvas) {
+				canvas.style.opacity = (0.3 + currentVolume * 0.7).toString();
+				canvas.style.transform = `scale(${1.05 + currentVolume * 0.1})`;
+			}
+
+			rafId = requestAnimationFrame(updateAmbilight);
+		};
+
+		rafId = requestAnimationFrame(updateAmbilight);
+		return () => cancelAnimationFrame(rafId);
+	}, []);
+
+
 	const [exportProgress, setExportProgress] = useState<ExportProgress | null>(null);
 	const [exportError, setExportError] = useState<string | null>(null);
 	const [showExportDialog, setShowExportDialog] = useState(false);
@@ -2379,6 +2470,19 @@ export default function VideoEditor() {
 										className="w-full flex justify-center items-center relative z-10"
 										style={STYLE_PREVIEW_CONTAINER}
 									>
+										{/* AUDIO-REACTIVE AMBILIGHT (LIVING CANVAS) */}
+										<canvas
+											ref={ambilightCanvasRef}
+											className="absolute pointer-events-none transition-all duration-75"
+											style={{
+												width: "100%",
+												height: "100%",
+												filter: "blur(100px) saturate(1.5)",
+												opacity: 0.3,
+												transform: "scale(1.05)",
+												zIndex: -1,
+											}}
+										/>
 										<div
 											className="relative rounded-2xl"
 											style={{
