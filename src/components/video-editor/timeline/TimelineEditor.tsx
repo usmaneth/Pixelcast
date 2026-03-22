@@ -322,7 +322,7 @@ function PlaybackCursor({
 			}}
 		>
 			<div
-				className="absolute top-0 bottom-0 w-[2px] bg-[#2563EB] shadow-[0_0_20px_rgba(255,255,255,0.6)] bg-white mix-blend-screen cursor-ew-resize pointer-events-auto hover:shadow-[0_0_15px_rgba(37,99,235,0.7)] transition-shadow"
+				className="absolute top-0 bottom-0 w-[2px] bg-white cursor-ew-resize pointer-events-auto transition-shadow"
 				style={{
 					[sideProperty]: `${offset}px`,
 				}}
@@ -335,10 +335,10 @@ function PlaybackCursor({
 					className="absolute -top-1 left-1/2 -translate-x-1/2 hover:scale-125 transition-transform"
 					style={{ width: "16px", height: "16px" }}
 				>
-					<div className="w-3 h-3 mx-auto mt-[2px] bg-[#2563EB] rotate-45 rounded-sm shadow-lg border border-white/20" />
+					<div className="w-3 h-3 mx-auto mt-[2px] bg-white rotate-45 rounded-sm shadow-sm" />
 				</div>
 				{isDragging && (
-					<div className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded bg-black/80 text-[10px] text-white/90 font-medium tabular-nums whitespace-nowrap border border-white/10 shadow-lg pointer-events-none">
+					<div className="absolute -top-6 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded bg-black/90 text-[10px] text-white/70 font-mono tabular-nums whitespace-nowrap pointer-events-none">
 						{formatPlayheadTime(clampedTime)}
 					</div>
 				)}
@@ -428,7 +428,7 @@ function TimelineAxis({
 				return (
 					<div
 						key={`minor-${time}`}
-						className="absolute bottom-0 h-1 w-[1px] bg-white/5"
+						className="absolute bottom-0 h-1 w-[1px] bg-white/10"
 						style={{ [sideProperty]: `${offset}px` }}
 					/>
 				);
@@ -450,11 +450,11 @@ function TimelineAxis({
 				return (
 					<div key={marker.time} style={markerStyle}>
 						<div className="flex flex-col items-center pb-1">
-							<div className="h-2 w-[1px] bg-white/20 mb-1" />
+							<div className="h-2 w-[1px] bg-white/10 mb-1" />
 							<span
 								className={cn(
-									"text-[10px] font-medium tabular-nums tracking-tight",
-									marker.time === currentTimeMs ? "text-[#2563EB]" : "text-slate-500",
+									"text-[10px] font-mono tabular-nums tracking-tight",
+									marker.time === currentTimeMs ? "text-white/40" : "text-white/20",
 								)}
 							>
 								{marker.label}
@@ -561,7 +561,7 @@ function Timeline({
 			className="select-none bg-transparent min-h-[140px] relative cursor-pointer group"
 			onClick={handleTimelineClick}
 		>
-			<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px)] bg-[length:20px_100%] pointer-events-none" />
+			<div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:20px_100%] pointer-events-none" />
 			<TimelineAxis videoDurationMs={videoDurationMs} currentTimeMs={currentTimeMs} />
 			<PlaybackCursor
 				currentTimeMs={currentTimeMs}
@@ -1479,15 +1479,15 @@ const TimelineEditor = memo(function TimelineEditor({
 
 	if (!videoDuration || videoDuration === 0) {
 		return (
-			<div className="flex-1 flex flex-col items-center justify-center rounded-lg bg-transparent gap-4">
-				<div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-					<Plus className="w-8 h-8 text-slate-400 drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]" />
+			<div className="flex-1 flex flex-col items-center justify-center rounded-lg bg-transparent gap-3">
+				<div className="w-12 h-12 rounded-full bg-white/[0.03] border border-white/[0.06] flex items-center justify-center">
+					<Plus className="w-6 h-6 text-white/20" />
 				</div>
 				<div className="text-center">
-					<p className="text-base font-semibold text-slate-200 tracking-wide drop-shadow-[0_0_5px_rgba(255,255,255,0.2)]">
+					<p className="text-sm font-medium text-white/40 tracking-wide">
 						No Video Loaded
 					</p>
-					<p className="text-sm font-medium text-slate-500 mt-1">
+					<p className="text-xs text-white/20 mt-1">
 						Drag and drop a video to start editing
 					</p>
 				</div>
@@ -1497,61 +1497,61 @@ const TimelineEditor = memo(function TimelineEditor({
 
 	return (
 		<div className="flex-1 min-h-0 flex flex-col bg-transparent overflow-hidden w-full h-full rounded-[32px]">
-			<div className="flex items-center gap-2 px-5 py-3 border-b border-white/10 bg-transparent backdrop-blur-[60px] border-b border-white/[0.04] relative z-10">
-				<div className="flex items-center gap-1.5">
+			<div className="flex items-center gap-2 px-5 py-2.5 border-b border-white/[0.04] bg-transparent relative z-10">
+				<div className="flex items-center gap-1">
 					<Button
 						onClick={handleAddZoom}
 						variant="ghost"
 						size="icon"
-						className="h-8 w-8 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 hover:shadow-[0_0_10px_rgba(59,130,246,0.3)] transition-all rounded-lg"
+						className="h-7 w-7 text-white/40 bg-white/[0.03] border border-white/[0.04] hover:bg-white/[0.06] hover:text-white/60 transition-all duration-150 rounded-lg"
 						title="Add Zoom (Z)"
 					>
-						<ZoomIn className="w-4.5 h-4.5 drop-shadow-[0_0_3px_currentColor]" />
+						<ZoomIn className="w-3.5 h-3.5" />
 					</Button>
 					<Button
 						onClick={handleSuggestZooms}
 						variant="ghost"
 						size="icon"
-						className="h-8 w-8 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 hover:shadow-[0_0_10px_rgba(59,130,246,0.3)] transition-all rounded-lg"
+						className="h-7 w-7 text-white/40 bg-white/[0.03] border border-white/[0.04] hover:bg-white/[0.06] hover:text-white/60 transition-all duration-150 rounded-lg"
 						title="Suggest Zooms from Cursor"
 					>
-						<WandSparkles className="w-4.5 h-4.5 drop-shadow-[0_0_3px_currentColor]" />
+						<WandSparkles className="w-3.5 h-3.5" />
 					</Button>
 					<Button
 						onClick={handleAddTrim}
 						variant="ghost"
 						size="icon"
-						className="h-8 w-8 text-slate-400 hover:text-red-400 hover:bg-red-500/10 hover:shadow-[0_0_10px_rgba(239,68,68,0.3)] transition-all rounded-lg"
+						className="h-7 w-7 text-white/40 bg-white/[0.03] border border-white/[0.04] hover:bg-white/[0.06] hover:text-white/60 transition-all duration-150 rounded-lg"
 						title="Add Trim (T)"
 					>
-						<Scissors className="w-4.5 h-4.5 drop-shadow-[0_0_3px_currentColor]" />
+						<Scissors className="w-3.5 h-3.5" />
 					</Button>
 					<Button
 						onClick={handleAddAnnotation}
 						variant="ghost"
 						size="icon"
-						className="h-8 w-8 text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 hover:shadow-[0_0_10px_rgba(251,191,36,0.3)] transition-all rounded-lg"
+						className="h-7 w-7 text-white/40 bg-white/[0.03] border border-white/[0.04] hover:bg-white/[0.06] hover:text-white/60 transition-all duration-150 rounded-lg"
 						title="Add Annotation (A)"
 					>
-						<MessageSquare className="w-4.5 h-4.5 drop-shadow-[0_0_3px_currentColor]" />
+						<MessageSquare className="w-3.5 h-3.5" />
 					</Button>
 					<Button
 						onClick={handleAddSpeed}
 						variant="ghost"
 						size="icon"
-						className="h-8 w-8 text-slate-400 hover:text-orange-400 hover:bg-orange-500/10 hover:shadow-[0_0_10px_rgba(249,115,22,0.3)] transition-all rounded-lg"
+						className="h-7 w-7 text-white/40 bg-white/[0.03] border border-white/[0.04] hover:bg-white/[0.06] hover:text-white/60 transition-all duration-150 rounded-lg"
 						title="Add Speed (S)"
 					>
-						<Gauge className="w-4.5 h-4.5 drop-shadow-[0_0_3px_currentColor]" />
+						<Gauge className="w-3.5 h-3.5" />
 					</Button>
 					<Button
 						onClick={handleAddAudio}
 						variant="ghost"
 						size="icon"
-						className="h-8 w-8 text-slate-400 hover:text-purple-400 hover:bg-purple-500/10 hover:shadow-[0_0_10px_rgba(168,85,247,0.3)] transition-all rounded-lg"
+						className="h-7 w-7 text-white/40 bg-white/[0.03] border border-white/[0.04] hover:bg-white/[0.06] hover:text-white/60 transition-all duration-150 rounded-lg"
 						title="Add Audio"
 					>
-						<Music className="w-4.5 h-4.5 drop-shadow-[0_0_3px_currentColor]" />
+						<Music className="w-3.5 h-3.5" />
 					</Button>
 				</div>
 				<div className="flex items-center gap-2">
@@ -1560,7 +1560,7 @@ const TimelineEditor = memo(function TimelineEditor({
 							<Button
 								variant="ghost"
 								size="sm"
-								className="h-8 px-3 text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/10 transition-all gap-1.5 rounded-lg border border-transparent hover:border-white/10"
+								className="h-7 px-2.5 text-[11px] font-medium text-white/40 bg-white/[0.03] border border-white/[0.04] hover:bg-white/[0.06] hover:text-white/60 transition-all duration-150 gap-1.5 rounded-lg"
 							>
 								<span className="font-medium tracking-wide">
 									{getAspectRatioLabel(aspectRatio)}
@@ -1624,21 +1624,21 @@ const TimelineEditor = memo(function TimelineEditor({
 					<TutorialHelp />
 				</div>
 				<div className="flex-1" />
-				<div className="flex items-center gap-4 text-[10px] text-slate-400 font-semibold tracking-wide uppercase">
-					<span className="flex items-center gap-2 drop-shadow-[0_0_2px_rgba(0,0,0,0.5)]">
-						<kbd className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-md text-blue-400 font-sans shadow-sm">
+				<div className="flex items-center gap-3 text-[10px] text-white/20 font-mono tracking-wider uppercase">
+					<span className="flex items-center gap-1.5">
+						<kbd className="px-1.5 py-0.5 bg-white/[0.03] border border-white/[0.06] rounded text-white/30 font-mono text-[9px]">
 							Side Scroll
 						</kbd>
 						<span>Pan</span>
 					</span>
-					<span className="flex items-center gap-2 drop-shadow-[0_0_2px_rgba(0,0,0,0.5)]">
-						<kbd className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-md text-blue-400 font-sans shadow-sm">
+					<span className="flex items-center gap-1.5">
+						<kbd className="px-1.5 py-0.5 bg-white/[0.03] border border-white/[0.06] rounded text-white/30 font-mono text-[9px]">
 							{scrollLabels.pan}
 						</kbd>
 						<span>Pan</span>
 					</span>
-					<span className="flex items-center gap-2 drop-shadow-[0_0_2px_rgba(0,0,0,0.5)]">
-						<kbd className="px-2 py-0.5 bg-white/5 border border-white/10 rounded-md text-blue-400 font-sans shadow-sm">
+					<span className="flex items-center gap-1.5">
+						<kbd className="px-1.5 py-0.5 bg-white/[0.03] border border-white/[0.06] rounded text-white/30 font-mono text-[9px]">
 							{scrollLabels.zoom}
 						</kbd>
 						<span>Zoom</span>
@@ -1647,17 +1647,10 @@ const TimelineEditor = memo(function TimelineEditor({
 			</div>
 			<div
 				ref={timelineContainerRef}
-				className="flex-1 min-h-0 overflow-auto bg-[#07090F] relative shadow-[inset_0_5px_20px_rgba(0,0,0,0.5)]"
+				className="flex-1 min-h-0 overflow-auto bg-[#0a0a0f] relative"
 				onClick={() => setSelectedKeyframeId(null)}
 				onWheel={handleTimelineWheel}
 			>
-				{/* Subtle noise overlay for the timeline background */}
-				<div
-					className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
-					style={{
-						backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-					}}
-				/>
 				<TimelineWrapper
 					range={clampedRange}
 					videoDuration={videoDuration}

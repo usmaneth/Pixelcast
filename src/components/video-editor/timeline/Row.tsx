@@ -9,25 +9,25 @@ interface RowProps extends RowDefinition {
 	labelColor?: string;
 }
 
-export default function Row({ id, children, label, hint, isEmpty, labelColor = "#666" }: RowProps) {
+export default function Row({ id, children, label, hint, isEmpty, labelColor }: RowProps) {
 	const { setNodeRef, rowWrapperStyle, rowStyle } = useRow({ id });
 
 	return (
 		<div
-			className="border-b border-[#18181b] bg-[#18181b] relative"
-			style={{ ...rowWrapperStyle, minHeight: 48, marginBottom: 4 }}
+			className="border-b border-white/[0.03] bg-transparent relative"
+			style={{ ...rowWrapperStyle, minHeight: 44, marginBottom: 2 }}
 		>
 			{label && (
 				<div
-					className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[9px] font-semibold uppercase tracking-widest z-20 pointer-events-none select-none"
-					style={{ color: labelColor, writingMode: "horizontal-tb" }}
+					className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[10px] font-mono uppercase tracking-wider z-20 pointer-events-none select-none text-white/20"
+					style={labelColor ? { color: labelColor } : undefined}
 				>
 					{label}
 				</div>
 			)}
 			{isEmpty && hint && (
 				<div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-10">
-					<span className="text-[11px] text-white/15 font-medium">{hint}</span>
+					<span className="text-[10px] text-white/10 font-mono">{hint}</span>
 				</div>
 			)}
 			<div ref={setNodeRef} style={rowStyle}>

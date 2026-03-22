@@ -107,35 +107,35 @@ export function ExportDialog({
 	return (
 		<>
 			<div
-				className="fixed inset-0 bg-black/80 backdrop-blur-2xl z-50 animate-in fade-in duration-300"
+				className="fixed inset-0 bg-black/70 backdrop-blur-xl z-50 animate-in fade-in duration-200"
 				onClick={isExporting ? undefined : onClose}
 			/>
-			<div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[60] bg-[#0A0D14]/90 backdrop-blur-3xl rounded-3xl shadow-[0_0_80px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] border border-white/10 p-10 w-[90vw] max-w-md animate-in zoom-in-95 duration-300">
-				<div className="flex items-center justify-between mb-8">
-					<div className="flex items-center gap-5">
+			<div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[60] bg-[#0c0c10]/95 backdrop-blur-2xl rounded-2xl shadow-[0_4px_40px_rgba(0,0,0,0.6)] border border-white/[0.07] p-8 w-[90vw] max-w-md animate-in zoom-in-95 duration-200">
+				<div className="flex items-center justify-between mb-6">
+					<div className="flex items-center gap-4">
 						{showSuccess ? (
 							<>
-								<div className="w-14 h-14 rounded-full bg-cyan-500/20 flex items-center justify-center ring-1 ring-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.4)]">
-									<Download className="w-7 h-7 text-cyan-400" />
+								<div className="w-11 h-11 rounded-full bg-emerald-500/10 flex items-center justify-center ring-1 ring-emerald-400/20">
+									<Download className="w-5 h-5 text-emerald-400" />
 								</div>
-								<div className="flex flex-col gap-1.5">
-									<span className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] block">
+								<div className="flex flex-col gap-1">
+									<span className="text-base font-semibold text-white/90">
 										{t("export.exportComplete")}
 									</span>
-									<span className="text-sm text-cyan-300/80 font-medium">
+									<span className="text-sm text-white/40">
 										{t("export.formatReady", undefined, { format: formatLabel.toLowerCase() })}
 									</span>
 									{exportedFilePath && (
 										<Button
 											variant="secondary"
 											onClick={handleClickShowInFolder}
-											className="mt-2 w-fit px-3 py-1 text-sm rounded-md bg-white/10 hover:bg-white/20 text-slate-200"
+											className="mt-2 w-fit px-3 py-1 text-xs rounded-lg bg-white/[0.06] hover:bg-white/10 text-white/60 border-0"
 										>
 											{t("export.showInFolder")}
 										</Button>
 									)}
 									{exportedFilePath && (
-										<span className="text-xs text-slate-500 break-all max-w-xs mt-1">
+										<span className="text-[11px] text-white/25 break-all max-w-xs mt-1">
 											{exportedFilePath.split("/").pop()}
 										</span>
 									)}
@@ -144,19 +144,19 @@ export function ExportDialog({
 						) : (
 							<>
 								{isExporting ? (
-									<div className="w-14 h-14 rounded-full bg-blue-600/20 flex items-center justify-center ring-1 ring-blue-500/30 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
-										<Loader2 className="w-7 h-7 text-blue-400 animate-spin drop-shadow-[0_0_8px_rgba(96,165,250,0.6)]" />
+									<div className="w-11 h-11 rounded-full bg-white/[0.04] flex items-center justify-center ring-1 ring-white/10">
+										<Loader2 className="w-5 h-5 text-white/50 animate-spin" />
 									</div>
 								) : (
-									<div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center border border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
-										<Download className="w-7 h-7 text-slate-300" />
+									<div className="w-11 h-11 rounded-full bg-white/[0.04] flex items-center justify-center ring-1 ring-white/10">
+										<Download className="w-5 h-5 text-white/40" />
 									</div>
 								)}
-								<div className="flex flex-col gap-1">
-									<span className="text-xl font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-[#E0000F] to-[#FF2215] drop-shadow-[0_0_8px_rgba(224,0,15,0.4)] block">
+								<div className="flex flex-col gap-0.5">
+									<span className="text-base font-semibold text-white/90">
 										{getTitle()}
 									</span>
-									<span className="text-sm font-medium text-slate-400">{getStatusMessage()}</span>
+									<span className="text-sm text-white/35">{getStatusMessage()}</span>
 								</div>
 							</>
 						)}
@@ -166,25 +166,25 @@ export function ExportDialog({
 							variant="ghost"
 							size="icon"
 							onClick={onClose}
-							className="hover:bg-white/10 text-slate-400 hover:text-white rounded-full transition-colors"
+							className="hover:bg-white/[0.06] text-white/30 hover:text-white/60 rounded-lg transition-colors h-8 w-8"
 						>
-							<X className="w-6 h-6" />
+							<X className="w-4 h-4" />
 						</Button>
 					)}
 				</div>
 
 				{error && (
-					<div className="mb-8 animate-in slide-in-from-top-2">
-						<div className="bg-gradient-to-r from-red-600/20 to-red-500/10 border border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.2)] rounded-2xl p-4 flex items-start gap-4">
-							<div className="p-1.5 bg-red-500/20 rounded-full shadow-[0_0_10px_rgba(239,68,68,0.4)]">
-								<X className="w-4 h-4 text-red-400" />
+					<div className="mb-6 animate-in slide-in-from-top-2">
+						<div className="bg-red-500/[0.06] border border-red-500/15 rounded-xl p-3.5 flex items-start gap-3">
+							<div className="p-1 bg-red-500/10 rounded-md mt-0.5">
+								<X className="w-3.5 h-3.5 text-red-400/80" />
 							</div>
-							<p className="text-sm font-medium text-red-300 leading-relaxed">{error}</p>
+							<p className="text-sm text-red-300/80 leading-relaxed">{error}</p>
 						</div>
 						{!isExporting && canRetrySave && onRetrySave && (
 							<Button
 								onClick={onRetrySave}
-								className="w-full mt-4 py-6 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-bold tracking-wide hover:scale-[1.02] shadow-[0_0_20px_rgba(6,182,212,0.4)] border-none rounded-xl transition-all"
+								className="w-full mt-3 py-5 bg-white/[0.06] text-white/70 font-medium hover:bg-white/10 border border-white/[0.07] rounded-xl transition-colors"
 							>
 								Save Again
 							</Button>
@@ -193,21 +193,21 @@ export function ExportDialog({
 				)}
 
 				{isExporting && progress && (
-					<div className="space-y-8">
-						<div className="space-y-3">
-							<div className="flex justify-between text-xs font-bold text-cyan-400/80 uppercase tracking-widest drop-shadow-[0_0_5px_rgba(34,211,238,0.3)]">
+					<div className="space-y-6">
+						<div className="space-y-2.5">
+							<div className="flex justify-between text-[11px] font-medium text-white/35 uppercase tracking-wider">
 								<span>
 									{isCompiling || isFinalizing
 										? t("export.compiling")
 										: t("export.renderingFrames")}
 								</span>
-								<span className="font-mono text-cyan-300 drop-shadow-[0_0_8px_rgba(103,232,249,0.8)]">
+								<span className="font-mono text-white/50">
 									{isCompiling || isFinalizing ? (
 										renderProgress !== undefined && renderProgress > 0 ? (
 											`${renderProgress}%`
 										) : (
-											<span className="flex items-center gap-2 text-blue-300">
-												<Loader2 className="w-3.5 h-3.5 animate-spin" />
+											<span className="flex items-center gap-1.5 text-white/35">
+												<Loader2 className="w-3 h-3 animate-spin" />
 												{t("export.processing")}
 											</span>
 										)
@@ -216,18 +216,17 @@ export function ExportDialog({
 									)}
 								</span>
 							</div>
-							<div className="h-3 bg-black/50 shadow-[inset_0_1px_3px_rgba(0,0,0,0.8)] rounded-full overflow-hidden border border-white/5 relative">
+							<div className="h-1.5 bg-white/[0.04] rounded-full overflow-hidden border border-white/[0.04] relative">
 								{isCompiling || isFinalizing ? (
-									// Show render progress if available, otherwise animated indeterminate bar
 									renderProgress !== undefined && renderProgress > 0 ? (
 										<div
-											className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)] transition-all duration-300 ease-out rounded-full"
+											className="h-full bg-white/60 transition-all duration-300 ease-out rounded-full"
 											style={{ width: `${renderProgress}%` }}
 										/>
 									) : (
 										<div className="h-full w-full relative overflow-hidden rounded-full">
 											<div
-												className="absolute h-full w-1/2 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_20px_rgba(34,211,238,0.8)] opacity-80"
+												className="absolute h-full w-1/3 bg-white/30 rounded-full"
 												style={{
 													animation: "indeterminate 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite",
 												}}
@@ -235,45 +234,45 @@ export function ExportDialog({
 											<style>{`
                         @keyframes indeterminate {
                           0% { transform: translateX(-150%); }
-                          100% { transform: translateX(250%); }
+                          100% { transform: translateX(400%); }
                         }
                       `}</style>
 										</div>
 									)
 								) : (
 									<div
-										className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)] transition-all duration-300 ease-out rounded-full"
+										className="h-full bg-white/60 transition-all duration-300 ease-out rounded-full"
 										style={{ width: `${Math.min(progress.percentage, 100)}%` }}
 									/>
 								)}
 							</div>
 						</div>
 
-						<div className="grid grid-cols-2 gap-4">
-							<div className="bg-white/5 rounded-2xl p-4 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-								<div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
+						<div className="grid grid-cols-2 gap-3">
+							<div className="bg-white/[0.03] rounded-xl p-3.5 border border-white/[0.05]">
+								<div className="text-[10px] font-medium text-white/25 uppercase tracking-wider mb-1">
 									{isCompiling || isFinalizing ? t("export.status") : t("export.format")}
 								</div>
-								<div className="text-slate-200 font-semibold text-sm">
+								<div className="text-white/70 font-medium text-sm">
 									{isCompiling || isFinalizing ? t("export.compilingStatus") : formatLabel}
 								</div>
 							</div>
-							<div className="bg-white/5 rounded-2xl p-4 border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-								<div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
+							<div className="bg-white/[0.03] rounded-xl p-3.5 border border-white/[0.05]">
+								<div className="text-[10px] font-medium text-white/25 uppercase tracking-wider mb-1">
 									{t("export.frames")}
 								</div>
-								<div className="text-slate-200 font-semibold text-sm font-mono tracking-wide">
+								<div className="text-white/70 font-medium text-sm font-mono">
 									{progress.currentFrame} / {progress.totalFrames}
 								</div>
 							</div>
 						</div>
 
 						{onCancel && (
-							<div className="pt-4">
+							<div className="pt-2">
 								<Button
 									onClick={onCancel}
 									variant="destructive"
-									className="w-full py-6 font-bold tracking-wide bg-gradient-to-r from-red-600/20 to-red-500/10 text-red-400 border border-red-500/30 hover:from-red-600/30 hover:to-red-500/20 hover:border-red-500/50 transition-all rounded-xl hover:shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:scale-[1.02]"
+									className="w-full py-5 font-medium bg-red-500/[0.06] text-red-400/80 border border-red-500/15 hover:bg-red-500/10 hover:border-red-500/25 transition-colors rounded-xl"
 								>
 									{t("export.cancelExport")}
 								</Button>
@@ -283,8 +282,8 @@ export function ExportDialog({
 				)}
 
 				{showSuccess && (
-					<div className="text-center py-4 animate-in zoom-in-95">
-						<p className="text-lg text-slate-200 font-medium">
+					<div className="text-center py-3 animate-in zoom-in-95">
+						<p className="text-sm text-white/50">
 							{t("export.savedSuccess", undefined, { format: formatLabel })}
 						</p>
 					</div>
