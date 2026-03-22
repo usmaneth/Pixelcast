@@ -65,25 +65,29 @@ export function HomeScreen() {
 	};
 
 	return (
-		<div className="flex flex-col h-screen w-full bg-[#0D0D0D] text-[#F2F0ED] overflow-hidden items-center justify-center p-8 selection:bg-red-500/30" style={{ WebkitAppRegion: "drag" } as React.CSSProperties}>
+		<div className="flex flex-col h-screen w-full bg-[#050505] text-[#F2F0ED] overflow-hidden items-center justify-center p-8 selection:bg-[#E0000F]/30 relative font-sans" style={{ WebkitAppRegion: "drag" } as React.CSSProperties}>
+			{/* Ambient spatial lighting */}
+			<div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] rounded-full bg-[#E0000F]/10 blur-[150px] pointer-events-none mix-blend-screen opacity-60 animate-pulse-slow" />
+			<div className="absolute bottom-1/4 right-1/4 w-[50vw] h-[50vw] rounded-full bg-[#2563EB]/10 blur-[180px] pointer-events-none mix-blend-screen opacity-60" />
+			<div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
 
 			<div className="flex flex-col items-center mb-16" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
 				<div className="w-16 h-16 relative flex items-center justify-center mb-4">
 					{/* klipt logo shape simulation - three rotating rectangles */}
 					<div className="absolute w-8 h-8 bg-transparent border-4 border-[#2E2E2E] rounded transform rotate-12" />
 					<div className="absolute w-8 h-8 bg-transparent border-4 border-[#555] rounded transform -rotate-12" />
-					<div className="absolute w-8 h-8 bg-[#E0000F] rounded transform rotate-45 shadow-[0_0_20px_rgba(224,0,15,0.4)]" />
+					<div className="absolute w-8 h-8 bg-gradient-to-tr from-[#E0000F] to-[#FF4500] rounded transform rotate-45 shadow-[0_0_30px_rgba(224,0,15,0.6),inset_0_2px_4px_rgba(255,255,255,0.4)]" />
 				</div>
-				<h1 className="text-4xl font-medium tracking-[-0.05em] text-white">klipt</h1>
-				<p className="text-sm font-medium text-[#555] mt-2 tracking-wide uppercase">edit at the speed of thought.</p>
+				<h1 className="text-5xl font-semibold tracking-[-0.04em] text-white drop-shadow-lg">klipt</h1>
+				<p className="text-[13px] font-medium text-white/40 mt-3 tracking-[0.2em] uppercase backdrop-blur-sm">edit at the speed of thought</p>
 			</div>
 
 			<div className="flex items-center gap-6 w-full max-w-2xl mb-12" style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}>
 				<div
 					onClick={handleRecordClick}
-					className="flex-1 flex flex-col items-start p-8 rounded-2xl bg-[#1C1C1C]/50 border border-[#2E2E2E] shadow-[0_10px_40px_rgba(0,0,0,0.5)] cursor-pointer group hover:bg-[#1C1C1C] hover:border-[#E0000F]/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(224,0,15,0.15)] relative overflow-hidden"
+					className="flex-1 flex flex-col items-start p-8 rounded-[32px] bg-white/[0.02] backdrop-blur-3xl border border-white/[0.05] shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] cursor-pointer group hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_30px_80px_rgba(224,0,15,0.25)] relative overflow-hidden"
 				>
-					<div className="absolute inset-0 bg-gradient-to-br from-[#E0000F]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+					<div className="absolute inset-0 bg-gradient-to-br from-[#E0000F]/20 via-[#FF4500]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none mix-blend-screen" />
 					<div className="w-12 h-12 rounded-full bg-[#E0000F]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(224,0,15,0.2)] group-hover:shadow-[0_0_25px_rgba(224,0,15,0.4)] ring-1 ring-[#E0000F]/30">
 						<CircleDot className="w-6 h-6 text-[#E0000F]" />
 					</div>
@@ -93,9 +97,9 @@ export function HomeScreen() {
 
 				<div
 					onClick={handleEditClick}
-					className="flex-1 flex flex-col items-start p-8 rounded-2xl bg-[#1C1C1C]/50 border border-[#2E2E2E] shadow-[0_10px_40px_rgba(0,0,0,0.5)] cursor-pointer group hover:bg-[#1C1C1C] hover:border-[#2563EB]/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(37,99,235,0.15)] relative overflow-hidden"
+					className="flex-1 flex flex-col items-start p-8 rounded-[32px] bg-white/[0.02] backdrop-blur-3xl border border-white/[0.05] shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] cursor-pointer group hover:bg-white/[0.04] hover:border-white/[0.15] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_30px_80px_rgba(37,99,235,0.25)] relative overflow-hidden"
 				>
-					<div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+					<div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/20 via-[#4F46E5]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none mix-blend-screen" />
 					<div className="w-12 h-12 rounded-full bg-[#2563EB]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-[0_0_15px_rgba(37,99,235,0.2)] group-hover:shadow-[0_0_25px_rgba(37,99,235,0.4)] ring-1 ring-[#2563EB]/30">
 						<Film className="w-6 h-6 text-[#2563EB]" />
 					</div>

@@ -290,7 +290,7 @@ function PlaybackCursor({
 			}}
 		>
 			<div
-				className="absolute top-0 bottom-0 w-[2px] bg-[#2563EB] shadow-[0_0_10px_rgba(37,99,235,0.5)] cursor-ew-resize pointer-events-auto hover:shadow-[0_0_15px_rgba(37,99,235,0.7)] transition-shadow"
+				className="absolute top-0 bottom-0 w-[2px] bg-[#2563EB] shadow-[0_0_20px_rgba(255,255,255,0.6)] bg-white mix-blend-screen cursor-ew-resize pointer-events-auto hover:shadow-[0_0_15px_rgba(37,99,235,0.7)] transition-shadow"
 				style={{
 					[sideProperty]: `${offset}px`,
 				}}
@@ -385,7 +385,7 @@ function TimelineAxis({
 
 	return (
 		<div
-			className="h-8 bg-[#09090b] border-b border-white/5 relative overflow-hidden select-none"
+			className="h-8 bg-transparent border-b border-white/[0.04] relative overflow-hidden select-none"
 			style={{
 				[sideProperty === "right" ? "marginRight" : "marginLeft"]: `${sidebarWidth}px`,
 			}}
@@ -513,7 +513,7 @@ function Timeline({
 		<div
 			ref={setRefs}
 			style={style}
-			className="select-none bg-[#09090b] min-h-[140px] relative cursor-pointer group"
+			className="select-none bg-transparent min-h-[140px] relative cursor-pointer group"
 			onClick={handleTimelineClick}
 		>
 			<div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px)] bg-[length:20px_100%] pointer-events-none" />
@@ -1355,7 +1355,7 @@ const TimelineEditor = memo(function TimelineEditor({
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-transparent overflow-hidden">
-      <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10 bg-[#0A0D15]/80 backdrop-blur-xl shadow-[0_2px_15px_rgba(0,0,0,0.3)] relative z-10">
+      <div className="flex items-center gap-2 px-5 py-3 border-b border-white/10 bg-transparent backdrop-blur-[60px] border-b border-white/[0.04] relative z-10">
         <div className="flex items-center gap-1.5">
           <Button
             onClick={handleAddZoom}

@@ -581,7 +581,7 @@ export function SettingsPanel({
 	}
 
 	return (
-		<div className="flex-[2] min-w-0 bg-[#0B0C10] border border-white/10 rounded-2xl flex flex-col shadow-[0_20px_50px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.05)] h-full overflow-hidden">
+		<div className="flex-[2] min-w-[340px] max-w-[420px] bg-white/[0.02] backdrop-blur-3xl border border-white/[0.05] rounded-[40px] flex flex-col shadow-[0_20px_60px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.1)] h-full overflow-hidden relative">
 			<div className="flex-1 overflow-y-auto custom-scrollbar p-4 pb-0">
 				<div className="mb-4">
 					<div className="flex items-center justify-between mb-3">
@@ -1221,7 +1221,7 @@ export function SettingsPanel({
 				</>
 			)}
 
-			<div className="flex-shrink-0 p-5 pt-4 bg-[#080A10] border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
+			<div className="flex-shrink-0 p-6 pt-5 bg-black/20 backdrop-blur-xl border-t border-white/[0.05] shadow-[0_-10px_40px_rgba(0,0,0,0.6)]">
 				<div className="flex items-center gap-3 mb-4">
 					<button
 						onClick={() => onExportFormatChange?.("mp4")}
@@ -1343,7 +1343,7 @@ export function SettingsPanel({
 								<Switch
 									checked={gifLoop}
 									onCheckedChange={onGifLoopChange}
-									className="data-[state=checked]:bg-[#2563EB] scale-75"
+									className="data-[state=checked]:bg-gradient-to-r data-[state=checked]:from-[#2563EB] data-[state=checked]:to-[#4F46E5] scale-90 border-white/10"
 								/>
 							</div>
 						</div>
@@ -1355,7 +1355,7 @@ export function SettingsPanel({
 						type="button"
 						variant="outline"
 						onClick={onLoadProject}
-						className="h-10 text-xs font-semibold gap-2 bg-[#1A1D24] border-white/10 text-slate-300 hover:bg-[#252936] hover:text-white hover:border-white/20 transition-all rounded-xl shadow-sm"
+						className="h-12 text-[13px] font-medium gap-2 bg-white/[0.03] border border-white/[0.05] text-white/70 hover:bg-white/[0.08] hover:text-white transition-all rounded-[16px] shadow-sm backdrop-blur-md"
 					>
 						<FolderOpen className="w-4 h-4" />
 						{tSettings("export.loadProject")}
@@ -1364,7 +1364,7 @@ export function SettingsPanel({
 						type="button"
 						variant="outline"
 						onClick={onSaveProject}
-						className="h-10 text-xs font-semibold gap-2 bg-[#1A1D24] border-white/10 text-slate-300 hover:bg-[#252936] hover:text-white hover:border-white/20 transition-all rounded-xl shadow-sm"
+						className="h-12 text-[13px] font-medium gap-2 bg-white/[0.03] border border-white/[0.05] text-white/70 hover:bg-white/[0.08] hover:text-white transition-all rounded-[16px] shadow-sm backdrop-blur-md"
 					>
 						<Save className="w-4 h-4" />
 						{tSettings("export.saveProject")}
@@ -1372,7 +1372,7 @@ export function SettingsPanel({
 				</div>
 			</div>
 
-			<div className="flex-shrink-0 p-5 pt-4 bg-[#0D0D0D] border-t border-[#2E2E2E]">
+			<div className="flex-shrink-0 p-6 pt-5 bg-black/20 backdrop-blur-xl border-t border-white/[0.05]">
 				<div className="flex gap-2">
 					<button
 						type="button"
